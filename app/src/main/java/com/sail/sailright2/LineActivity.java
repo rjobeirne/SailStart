@@ -3,9 +3,9 @@ package com.sail.sailright2;
 import android.location.Location;
 import android.util.Log;
 
-public class FinishLine {
+public class LineActivity {
 
-    public FinishLine (Location a, Location h) {
+    public LineActivity(Location a, Location h) {
         // constructor with 'A' Mark, and 'H' mark location details, and first currentLocation
         markA = a;
         markH = h;
@@ -15,8 +15,8 @@ public class FinishLine {
 
 
     // Initialise global object variables
-    String finishTarget = null;
-    Location finishPoint = null;
+    String lineTarget = null;
+    Location linePoint = null;
     Location markA = null;
     Location markH = null;
     double latA = 0;
@@ -59,8 +59,8 @@ public class FinishLine {
      *
      * @return
      */
-    public String getFinishTarget(Location currentLocation) {
-        Log.e("**start getFinishTarget","");
+    public String getLineTarget(Location currentLocation) {
+        Log.e("**start getLineTarget","");
         // Update current Location of the boat, passed in from Main
         mCurrentLocation = currentLocation;
         setBoatDetails(mCurrentLocation);  // Update current boat location details
@@ -68,14 +68,14 @@ public class FinishLine {
         if (latBoat > latA) {
             // Approaching from the north
             if (boatHeading > bearingToA) {
-                finishTarget = "A";
+                lineTarget = "A";
             } else if (boatHeading < bearingToH) {
-                finishTarget = "H";
+                lineTarget = "H";
             } else {
-                Log.e("Heading for line", finishTarget);
-                finishTarget = "Line";
+                Log.e("Heading for line", lineTarget);
+                lineTarget = "Line";
             }
-            Log.e("***finishTarget1", finishTarget);
+            Log.e("***lineTarget1", lineTarget);
 
         } else {
             // Approaching from the south
@@ -91,33 +91,33 @@ public class FinishLine {
             }
 
             if (boatHeading < bearingToA) {
-                finishTarget = "A";
+                lineTarget = "A";
             } else if (boatHeading > bearingToH) {
-                finishTarget = "H";
+                lineTarget = "H";
             } else {
-                finishTarget = "Line";
+                lineTarget = "Line";
             }
 
         }
-        return  finishTarget;
+        return lineTarget;
     }
 
     /**
      *
      * @return
      */
-    public Location getFinishPoint(Location currentLocation) {
-        Log.e("started getFinishPoint","");
+    public Location getLinePoint(Location currentLocation) {
+        Log.e("started getLinePoint","");
         mCurrentLocation = currentLocation;
         setBoatDetails(mCurrentLocation);  // Update the current Location of the boat
 
         double finLon = (constLine - constBoat) / (slopeBoat - slopeLine);
         double finLat = slopeLine * finLon +constLine;
-        finishPoint.setLongitude(finLon);
-        finishPoint.setLatitude(finLat);
-         Log.e("**finishPoint", String.valueOf(finishPoint));
+        linePoint.setLongitude(finLon);
+        linePoint.setLatitude(finLat);
+         Log.e("**linePoint", String.valueOf(linePoint));
 
-        return finishPoint;
+        return linePoint;
     }
 
 }

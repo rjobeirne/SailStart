@@ -32,7 +32,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.provider.Settings;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,7 +56,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -193,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     // Define the 'Marks' Array
     Marks theMarks = null;
     Courses theCourses = null;
-    FinishLine theFinish = null;
+    LineActivity theLine = null;
 
     // Define parameters of next mark
     double mSpeed;
@@ -265,13 +263,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Create theFinish object here, and pass in 'A' Mark, and 'H' Mark
+        // Create theLine object here, and pass in 'A' Mark, and 'H' Mark
         String a = "A"; // Finish line data
         String h = "H"; // Finish Line Data
         Location aMark = theMarks.getNextMark(a);
         Location hMark = theMarks.getNextMark(h);
         // Should have A Mark, H Mark to create the Finish Line Object
-        theFinish = new FinishLine(aMark, hMark);
+        theLine = new LineActivity(aMark, hMark);
 
 
         // Locate the UI widgets.
@@ -576,11 +574,11 @@ public class MainActivity extends AppCompatActivity {
 //
 //            // Find the the target point on the finish line (A Mark, H Mark or Line)
 //            // Pass in the currentLocation
-//            nextMark =  theFinish.getFinishTarget(mCurrentLocation);
+//            nextMark =  theLine.getFinishTarget(mCurrentLocation);
 //
 //            if (nextMark.equals("Line")) {
 //                // Insert the finish line crossing point
-//                destMark = theFinish.getFinishPoint(mCurrentLocation);
+//                destMark = theLine.getFinishPoint(mCurrentLocation);
 //            } else {
 //                // Set the next mark to either A or H
 //                mNextMarkTextView.setText("Fin - " + nextMark + " Mark");
@@ -608,12 +606,12 @@ public class MainActivity extends AppCompatActivity {
 
             // Find the the target point on the finish line (A Mark, H Mark or Line)
             // Pass in the currentLocation
-            String nextMarkFin =  theFinish.getFinishTarget(mCurrentLocation);
+            String nextMarkFin =  theLine.getLineTarget(mCurrentLocation);
             Log.e("NextMark ", nextMarkFin);
 
             if (nextMarkFin.equals("Line")) {
                 // Insert the finish line crossing point
-                destMark = theFinish.getFinishPoint(mCurrentLocation);
+                destMark = theLine.getLinePoint(mCurrentLocation);
             } else {
                 // Set the next mark to either A or H
                 mNextMarkTextView.setText("Fin - " + nextMarkFin + " Mark");
