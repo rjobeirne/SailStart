@@ -1,7 +1,10 @@
 package com.sail.sailright2;
 
 import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
+
+import androidx.core.location.LocationManagerCompat;
 
 public class LineActivity {
 
@@ -16,7 +19,7 @@ public class LineActivity {
 
     // Initialise global object variables
     String lineTarget = null;
-    Location linePoint = null;
+    Location linePoint = new Location(LocationManager.GPS_PROVIDER);
     Location markA = null;
     Location markH = null;
     double latA = 0;
@@ -41,7 +44,15 @@ public class LineActivity {
         latBoat = mCurrentLocation.getLatitude();
         lonBoat = mCurrentLocation.getLongitude();
 
-        boatHeading = mCurrentLocation.getBearing();
+        float mHeading = mCurrentLocation.getBearing();
+//        float mHeading = -158 + 360;
+            if(mHeading > 180) {
+                boatHeading = mHeading - 360;
+            } else {
+                boatHeading = mHeading;
+            }
+
+//        Log.e("boatheading", String.valueOf(boatHeading));
         slopeBoat = Math.tan(Math.toRadians(boatHeading));
         constBoat = latBoat - (slopeBoat * lonBoat);
 
@@ -72,10 +83,11 @@ public class LineActivity {
             } else if (boatHeading < bearingToH) {
                 lineTarget = "H";
             } else {
-                Log.e("Heading for line", lineTarget);
                 lineTarget = "Line";
+//                Log.e("Heading for line", lineTarget);
             }
-            Log.e("***lineTarget1", lineTarget);
+//            Log.e("Target,boat,A,H", lineTarget + String.valueOf(boatHeading) +
+//                    String.valueOf(bearingToA) + String.valueOf(bearingToH));
 
         } else {
             // Approaching from the south
@@ -115,7 +127,7 @@ public class LineActivity {
         double finLat = slopeLine * finLon +constLine;
         linePoint.setLongitude(finLon);
         linePoint.setLatitude(finLat);
-         Log.e("**linePoint", String.valueOf(linePoint));
+//         Log.e("**linePoint", String.valueOf(linePoint));
 
         return linePoint;
     }

@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mCurrentLocation = locationResult.getLastLocation();
                 mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-                updateLocationUI();
+                updateUI();
             }
         };
     }
@@ -608,10 +608,11 @@ public class MainActivity extends AppCompatActivity {
             // Find the the target point on the finish line (A Mark, H Mark or Line)
             // Pass in the currentLocation
             String nextMarkFin =  theLine.getLineTarget(mCurrentLocation);
-            Log.e("NextMark ", nextMarkFin);
+//            Log.e("NextMark ", nextMarkFin + nextMark);
 
             if (nextMarkFin.equals("Line")) {
                 // Insert the finish line crossing point
+                mNextMarkTextView.setText(nextMarkFin);
                 destMark = theLine.getLinePoint(mCurrentLocation);
             } else {
                 // Set the next mark to either A or H
