@@ -31,6 +31,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +49,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mDistanceTextView;
     private TextView mDistanceUnitTextView;
     private TextView mBearingTextView;
-    private TextView mDiscrepTextView;
+    private TextView mVarianceTextView;
     private TextView mTimeToMarkTextView;
     private TextView mTimeTextView;
 
@@ -167,11 +169,11 @@ public class MainActivity extends AppCompatActivity {
     private String mNextMarkLabel;
     private String mCourseLabel;
     private String mLatitudeLabel;
-    private String mLongitudeLabel; //           return distToMark
+    private String mLongitudeLabel;
     private String mSpeedLabel;
     private String mSpeedUnits;
     private String mHeadingLabel;
-    private String mDiscrepTextViewLabel;
+    private String mVarianceTextViewLabel;
     private String mAccuracyTextViewLabel;
     private String mDistanceTextViewLabel;
     private String mBearingTextViewLabel;
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean mRequestingLocationUpdates;
 
     /**
-     * Time when the location was updated represented as a String.
+     * Time when the location was updated re            Log.d("posMark", String.valueOf(posMark));presented as a String.
      */
     private String mLastUpdateTime;
 
@@ -193,11 +195,14 @@ public class MainActivity extends AppCompatActivity {
     Marks theMarks = null;
     Courses theCourses = null;
     LineActivity theLine = null;
+    RaceStartActivity theStart = null;
 
     // Define parameters of next mark
     double mSpeed;
     double vmgToMark;
-    String speedDisplay;
+    String speedDisplay;//        mRequestingLocationUpdates = "true";
+//        mLastUpdateTime = "";
+
     int mHeading;
     int negHeading;
     String displayHeading;
@@ -209,9 +214,12 @@ public class MainActivity extends AppCompatActivity {
     int bearingToMark;
     int displayBearingToMark;
     String distUnits;
-    int bearingDiscrepancy;
+    int bearingVariance;
 
     float distDisplay;
+//    LineActivity theLine = null;
+//    RaceStartActivity theStart = null;
+
     String displayDistToMark;
     float distanceToMark;
     long lastUpdateTime;
@@ -225,21 +233,28 @@ public class MainActivity extends AppCompatActivity {
     int posCourse = 0;
     int listMarkSize, listCourseSize;
     String raceCourse;
+//    LineActivity theLine = null;
+//    RaceStartActivity theStart = null;
+
     ArrayList courseMarks;
     Bundle savedInstanceState;
+    Bundle mStartData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayList<Mark> marks = new ArrayList<>();
-        ArrayList<Course> courses = new ArrayList<>();
-        ArrayList courseMarks = new ArrayList();
+
+//        ArrayList<Mark> marks = new ArrayList<>();
+//        ArrayList<Course> courses = new ArrayList<>();
+//        ArrayList courseMarks = new ArrayList();
 
         // first check for runtime permission
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
         int grant = ContextCompat.checkSelfPermission(this, permission);
+//    LineActivity theLine = null;
+//    RaceStartActivity theStart = null;
 
         if (grant != PackageManager.PERMISSION_GRANTED) {
             String[] permission_list = new String[1];
@@ -271,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
         Location hMark = theMarks.getNextMark(h);
         // Should have A Mark, H Mark to create the Finish Line Object
         theLine = new LineActivity(aMark, hMark);
+//        theStart = new RaceStartActivity(mStartData);
 
 
         // Locate the UI widgets.
@@ -287,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
         mDistanceTextView = (TextView) findViewById(R.id.distance_text);
         mDistanceUnitTextView = (TextView) findViewById(R.id.dist_unit);
         mBearingTextView = (TextView) findViewById(R.id.bearing_text);
-        mDiscrepTextView = (TextView) findViewById(R.id.discrepancy_text);
+        mVarianceTextView = (TextView) findViewById(R.id.variance_text);
 //        mLastUpdateTimeTextView = (TextView) findViewById(R.id.last_update_time_text);
         mTimeToMarkTextView = (TextView) findViewById(R.id.time_to_mark);
         mTimeTextView = (TextView) findViewById(R.id.time_text);
@@ -316,10 +332,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Kick off the process of building the LocationCallback, LocationRequest, and
         // LocationSettingsRequest objects.
-        createLocationCallback();
-        createLocationRequest();
-        buildLocationSettingsRequest();
-        startLocationUpdates();
+//        createLocationCallback();
+//        createLocationRequest();
+//        buildLocationSettingsRequest();
+//        startLocationUpdates();
     }
 
     /**
@@ -528,13 +544,13 @@ public class MainActivity extends AppCompatActivity {
      * This method is called when the + button is pressed
      */
     public void next_mark(View view) {
-        {
+
             // Increment to the position of the nMath.abs(ext mark on the list
             if (posMark >= listMarkSize - 1) {
                 posMark = 0;
             } else
                 posMark = posMark + 1;
-        }
+
         setNextMark();
     }
 
@@ -546,13 +562,14 @@ public class MainActivity extends AppCompatActivity {
             } else
                 posMark = posMark - 1;
         }
+
         setNextMark();
     }
 
     /**
      *  Set next destination mark
      */
-    public void setNextMark() {
+    private void setNextMark() {
         if (raceCourse.equals("None")) {
             listMarkSize = theMarks.marks.size();
             nextMark = theMarks.marks.get(posMark).getmarkName();
@@ -599,7 +616,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI() {
 
         if (nextMark.equals("Start")) {
-            openStartActivity();
+            openRaceStartActivity();
         }
 
         // Check to see if next mark is not the finish
@@ -624,9 +641,23 @@ public class MainActivity extends AppCompatActivity {
         updateLocationUI();
     }
 
-    private void openStartActivity() {
-        Intent start = new Intent(this, StartActivity.class);
-        startActivity(start);
+    private void openRaceStartActivity() {
+        Intent startRace = new Intent(MainActivity.this, RaceStartActivity.class);
+        mStartData = new Bundle();
+        mStartData.putString("course", raceCourse);
+        mStartData.putString("mark", nextMark);
+        mStartData.putString("speed", speedDisplay);
+        mStartData.putString("distance", displayDistToMark);
+        mStartData.putString("heading", displayHeading);
+        mStartData.putInt("bearing", displayBearingToMark);
+        mStartData.putStringArrayList("courseMarks", courseMarks);
+        mStartData.putInt("markPos", posMark);
+
+        startRace.putExtras(mStartData);
+
+//        startRace.putExtra("course", raceCourse);
+        startActivity(startRace);
+        Log.e("Ret from StartActivity","");
 
     }
 
@@ -634,6 +665,7 @@ public class MainActivity extends AppCompatActivity {
      * Sets the value of the UI fields for the location latitude, longitude and last update time.
      */
     private void updateLocationUI() {
+
         if (destMark == null) {
             setCourse();
             setNextMark();
@@ -647,8 +679,10 @@ public class MainActivity extends AppCompatActivity {
             speedDisplay = new DecimalFormat( "##0.0").format( mSpeed);
 
             // Change heading to correct format
+        mStartData.putString("heading", displayHeading);
             mHeading = (int) mCurrentLocation.getBearing();
             if(mHeading > 180) {
+
                 negHeading = mHeading - 360;
             } else {
                 negHeading = mHeading;
@@ -678,8 +712,8 @@ public class MainActivity extends AppCompatActivity {
                     displayBearingToMark = bearingToMark;
                 }
 
-            // Calculate discrepancy between heading and bearing to mark
-            bearingDiscrepancy = negHeading - bearingToMark;
+            // Calculate variance between heading and bearing to mark
+            bearingVariance = negHeading - bearingToMark;
 
             // Get time since last update
             lastUpdateTime = mCurrentLocation.getTime();
@@ -729,12 +763,12 @@ public class MainActivity extends AppCompatActivity {
             mDistanceTextView.setText(displayDistToMark);
             mDistanceUnitTextView.setText(distUnits);
             mBearingTextView.setText(String.format("%03d", displayBearingToMark));
-            mDiscrepTextView.setText(String.format("%03d", bearingDiscrepancy));
-            if ( bearingDiscrepancy < -2) {
-                mDiscrepTextView.setTextColor(Color.RED);
+            mVarianceTextView.setText(String.format("%03d", bearingVariance));
+            if ( bearingVariance < -2) {
+                mVarianceTextView.setTextColor(Color.RED);
             }
-            if ( bearingDiscrepancy > 2) {
-                mDiscrepTextView.setTextColor(Color.GREEN);
+            if ( bearingVariance > 2) {
+                mVarianceTextView.setTextColor(Color.GREEN);
             }
 //            mLastUpdateTimeTextView.setText(mLastUpdateTimeLabel + ": " + timeSinceLastUpdate);updateValuesFromBundle
             mTimeToMarkTextView.setText(ttmDisplay);
