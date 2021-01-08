@@ -686,7 +686,10 @@ public class MainActivity extends AppCompatActivity {
             currentTime = Calendar.getInstance().getTimeInMillis();
             timeSinceLastUpdate = (currentTime - lastUpdateTime)/1000;
 
-            currentTimeDisplay = java.text.DateFormat.getTimeInstance().format(new Date());
+            SimpleDateFormat time = new SimpleDateFormat("kkmm:ss");
+
+//            currentTimeDisplay = java.text.DateFormat.getTimeInstance().format(new Date());
+            currentTimeDisplay = time.format(currentTime);
 
 //                    String.format("%02d:%02d:%02d",
 //                    TimeUnit.SECONDS.toHours(currentTime),
