@@ -599,36 +599,36 @@ public class MainActivity extends AppCompatActivity {
      *///
     private void updateUI() {
 
-        if (nextMark.equals("Start")) {
-            openStartActivity();
-        }
-
-        // Check to see if next mark is not the finish
-        if (nextMark.equals("Finish")) {
-
-            // Find the the target point on the finish line (A Mark, H Mark or Line)
-            // Pass in the currentLocation
-            String nextMarkFin =  theFinish.getFinishTarget(mCurrentLocation);
-            Log.e("NextMark ", nextMarkFin);
-
-            if (nextMarkFin.equals("Line")) {
-                // Insert the finish line crossing point
-                destMark = theFinish.getFinishPoint(mCurrentLocation);
-            } else {
-                // Set the next mark to either A or H
-                mNextMarkTextView.setText("Fin - " + nextMarkFin + " Mark");
-                destMark = theMarks.getNextMark(nextMarkFin);
-            }
-        }
+//        if (nextMark.equals("Start")) {
+//            openStartActivity();
+//        }
+//
+//        // Check to see if next mark is not the finish
+//        if (nextMark.equals("Finish")) {
+//
+//            // Find the the target point on the finish line (A Mark, H Mark or Line)
+//            // Pass in the currentLocation
+//            String nextMarkFin =  theFinish.getFinishTarget(mCurrentLocation);
+//            Log.e("NextMark ", nextMarkFin);
+//
+//            if (nextMarkFin.equals("Line")) {
+//                // Insert the finish line crossing point
+//                destMark = theFinish.getFinishPoint(mCurrentLocation);
+//            } else {
+//                // Set the next mark to either A or H
+//                mNextMarkTextView.setText("Fin - " + nextMarkFin + " Mark");
+//                destMark = theMarks.getNextMark(nextMarkFin);
+//            }
+//        }
 
         updateLocationUI();
     }
 
-    private void openStartActivity() {
-        Intent start = new Intent(this, StartActivity.class);
-        startActivity(start);
-
-    }
+//    private void openStartActivity() {
+//        Intent start = new Intent(this, StartActivity.class);
+//        startActivity(start);
+//
+//    }
 
     /**Math.abs(
      * Sets the value of the UI fields for the location latitude, longitude and last update time.
