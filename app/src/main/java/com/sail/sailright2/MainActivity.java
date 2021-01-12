@@ -219,6 +219,8 @@ public class MainActivity extends AppCompatActivity {
     long lastUpdateTime;
     long timeSinceLastUpdate;
     long timeToMark;
+    long ttm1;
+    long ttm2;
     String ttmDisplay;
     long currentTime;
     String currentTimeDisplay;
@@ -709,15 +711,31 @@ public class MainActivity extends AppCompatActivity {
 
             // Keep displayed figure below 100 hours 360000 secs.
             if (timeToMark < 360000 && timeToMark > 0) {
-                ttmDisplay = String.format("%02dh %02d' %02d\"",
+                ttm2 = ttm1;
+                ttm1 = timeToMark;
+            }else {
+                timeToMark = ttm1;
+            }
+
+            if (timeToMark > 3559) {
+                    ttmDisplay = String.format("%02dh %02d' %02d\"",
                     TimeUnit.SECONDS.toHours(timeToMark),
                     TimeUnit.SECONDS.toMinutes(timeToMark) -
                     TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeToMark)),
                     TimeUnit.SECONDS.toSeconds(timeToMark) -
                     TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeToMark)));
             } else {
-                ttmDisplay = "--h --' --\"";
+                    ttmDisplay = String.format("%02d' %02d\"",
+                    TimeUnit.SECONDS.toMinutes(timeToMark) -
+                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeToMark)),
+                    TimeUnit.SECONDS.toSeconds(timeToMark) -
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeToMark)));
             }
+
+//            } else {
+//
+//                ttmDisplay = "--h --' --\"";
+//            }
 
         // Send info to UI
 //            mLatitudeTextView.setText(mLatitudeLabel + ": " + mCurrentLocation.getLatitude());
