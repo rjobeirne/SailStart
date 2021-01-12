@@ -198,9 +198,17 @@ public class MainActivity extends AppCompatActivity {
 
     // Define parameters of next mark
     double mSpeed;
+    double mSpeed1;
+    double mSpeed2;
+    double mSpeed3;
+    double mSmoothSpeed;
     double vmgToMark;
     String speedDisplay;
     int mHeading;
+    int mHeading1;
+    int mHeading2;
+    int mHeading3;
+    int mSmoothHeading;
     int negHeading;
     String displayHeading;
     String nextMark = "A Mark";
@@ -221,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
     long timeToMark;
     long ttm1;
     long ttm2;
+    long mSmoothTimeToMark;
     String ttmDisplay;
     long currentTime;
     String currentTimeDisplay;
@@ -646,19 +655,27 @@ public class MainActivity extends AppCompatActivity {
         if (mCurrentLocation != null) {
 
         // Process gps data for display on UI
-            // Convert speed to knots and format1000
+            // Convert speed to knots and format and smooth
+            mSpeed3 = mSpeed2;
+            mSpeed2 = mSpeed1;
+            mSpeed1 = mSpeed;
             mSpeed = mCurrentLocation.getSpeed() * 1.943844;
-            speedDisplay = new DecimalFormat( "##0.0").format( mSpeed);
+            mSmoothSpeed = (mSpeed + mSpeed1 + mSpeed2 + mSpeed3)/4;
+            speedDisplay = new DecimalFormat( "##0.0").format( mSmoothSpeed);
 
-            // Change heading to correct format
+            // Change heading to correct format and smooth
+            mHeading3 = mHeading2;
+            mHeading2 = mHeading1;
+            mHeading1 = mHeading;
             mHeading = (int) mCurrentLocation.getBearing();
-            if(mHeading > 180) {
-                negHeading = mHeading - 360;
+            mSmoothHeading = (mHeading + mHeading1 + mHeading2 + mHeading3)/4;
+            if(mSmoothHeading > 180) {
+                negHeading = mSmoothHeading - 360;
             } else {
-                negHeading = mHeading;
+                negHeading = mSmoothHeading;
             }
 
-            displayHeading = String.format("%03d", mHeading);
+            displayHeading = String.format("%03d", mSmoothHeading);
 
             // Change distance to mark to nautical miles if > 500m and correct formattring.format decimal places
             distToMark = mCurrentLocation.distanceTo(destMark);
@@ -683,7 +700,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             // Calculate discrepancy between heading and bearing to mark
-            bearingDiscrepancy = negHeading - bearingToMark;
+            bearingDiscrepancy = mSmoothHeading - displayBearingToMark;
 
             // Get time since last update
             lastUpdateTime = mCurrentLocation.getTime();
@@ -695,47 +712,35 @@ public class MainActivity extends AppCompatActivity {
 //            currentTimeDisplay = java.text.DateFormat.getTimeInstance().format(new Date());
             currentTimeDisplay = time.format(currentTime);
 
-//                    String.format("%02d:%02d:%02d",
-//                    TimeUnit.SECONDS.toHours(currentTime),
-//                    TimeUnit.SECONDS.toMinutes(currentTime) -
-//                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(currentTime)),
-//                    TimeUnit.SECONDS.toSeconds(currentTime) -
-//                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(currentTime)));
-
-            // Calculate time to the mark
-            mSpeed = (float) mCurrentLocation.getSpeed();
-
             // Calc time to mark
-            vmgToMark = Math.cos(mHeading - bearingToMark) * mSpeed;
+            vmgToMark = Math.cos(Math.toRadians(bearingDiscrepancy)) * mSmoothSpeed;
+
+            ttm2 = ttm1;
+            ttm1 = timeToMark;
             timeToMark = (long) (distToMark / vmgToMark);
+            mSmoothTimeToMark = timeToMark ;
 
             // Keep displayed figure below 100 hours 360000 secs.
-            if (timeToMark < 360000 && timeToMark > 0) {
-                ttm2 = ttm1;
-                ttm1 = timeToMark;
-            }else {
-                timeToMark = ttm1;
-            }
+            if (mSmoothTimeToMark < 360000 && mSmoothTimeToMark > 0) {
 
-            if (timeToMark > 3559) {
+
+                if (mSmoothTimeToMark > 3559) {
                     ttmDisplay = String.format("%02dh %02d' %02d\"",
-                    TimeUnit.SECONDS.toHours(timeToMark),
-                    TimeUnit.SECONDS.toMinutes(timeToMark) -
-                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeToMark)),
-                    TimeUnit.SECONDS.toSeconds(timeToMark) -
-                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeToMark)));
-            } else {
+                            TimeUnit.SECONDS.toHours(mSmoothTimeToMark),
+                            TimeUnit.SECONDS.toMinutes(mSmoothTimeToMark) -
+                                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(mSmoothTimeToMark)),
+                            TimeUnit.SECONDS.toSeconds(mSmoothTimeToMark) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(mSmoothTimeToMark)));
+                } else {
                     ttmDisplay = String.format("%02d' %02d\"",
-                    TimeUnit.SECONDS.toMinutes(timeToMark) -
-                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeToMark)),
-                    TimeUnit.SECONDS.toSeconds(timeToMark) -
-                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeToMark)));
+                            TimeUnit.SECONDS.toMinutes(mSmoothTimeToMark) -
+                                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(mSmoothTimeToMark)),
+                            TimeUnit.SECONDS.toSeconds(mSmoothTimeToMark) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(mSmoothTimeToMark)));
+                }
+            }else {
+                ttmDisplay = "--h --' --\"";
             }
-
-//            } else {
-//
-//                ttmDisplay = "--h --' --\"";
-//            }
 
         // Send info to UI
 //            mLatitudeTextView.setText(mLatitudeLabel + ": " + mCurrentLocation.getLatitude());
