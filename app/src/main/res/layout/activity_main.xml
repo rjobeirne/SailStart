@@ -127,6 +127,7 @@
         android:gravity="center"
         android:text="@string/heading"
         android:textSize="64sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/discrepancy_text"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/heading_title"
@@ -166,6 +167,7 @@
         android:gravity="center"
         android:text="@string/bearing"
         android:textSize="64sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/bearing_title"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/discrepancy_text"
@@ -207,6 +209,7 @@
         android:gravity="center"
         android:text="@string/speed"
         android:textSize="64sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/distance_text"
         app:layout_constraintStart_toEndOf="@id/speed_title"
         app:layout_constraintTop_toBottomOf="@+id/heading_text" />
@@ -231,6 +234,7 @@
         android:gravity="center"
         android:text="@string/distance"
         android:textSize="64sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/dist_title"
         app:layout_constraintStart_toEndOf="@id/speed_text"
         app:layout_constraintTop_toTopOf="@+id/speed_text" />
