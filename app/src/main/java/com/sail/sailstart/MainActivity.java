@@ -200,8 +200,7 @@ public class MainActivity extends AppCompatActivity {
     // Define parameters of next mark
     double mSpeed;
     double vmgToMark;
-    String speedDisplay;//        mRequestingLocationUpdates = "true";
-//        mLastUpdateTime = "";
+    String speedDisplay;
 
     int mHeading;
     int negHeading;
@@ -217,8 +216,6 @@ public class MainActivity extends AppCompatActivity {
     int bearingVariance;
 
     float distDisplay;
-//    LineActivity theLine = null;
-//    RaceStartActivity theStart = null;
 
     String displayDistToMark;
     float distanceToMark;
@@ -233,8 +230,6 @@ public class MainActivity extends AppCompatActivity {
     int posCourse = 0;
     int listMarkSize, listCourseSize;
     String raceCourse;
-//    LineActivity theLine = null;
-//    RaceStartActivity theStart = null;
 
     ArrayList courseMarks;
     Bundle savedInstanceState;
@@ -245,16 +240,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-//        ArrayList<Mark> marks = new ArrayList<>();
-//        ArrayList<Course> courses = new ArrayList<>();
-//        ArrayList courseMarks = new ArrayList();
-
         // first check for runtime permission
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
         int grant = ContextCompat.checkSelfPermission(this, permission);
-//    LineActivity theLine = null;
-//    RaceStartActivity theStart = null;
 
         if (grant != PackageManager.PERMISSION_GRANTED) {
             String[] permission_list = new String[1];
@@ -286,56 +274,29 @@ public class MainActivity extends AppCompatActivity {
         Location hMark = theMarks.getNextMark(h);
         // Should have A Mark, H Mark to create the Finish Line Object
         theLine = new LineActivity(aMark, hMark);
-//        theStart = new RaceStartActivity(mStartData);
-
 
         // Locate the UI widgets.
         mNextMarkTextView = (TextView) findViewById(R.id.next_mark_name);
         mCourseTextView = (TextView) findViewById(R.id.course_name);
-//        mLatitudeTextView = (TextView) findViewById(R.id.latitude);
-//        mLongitudeTextView = (TextView) findViewById(R.id.longitude);
         mSpeedTextView = (TextView) findViewById(R.id.speed_text);
-//        mSpeedUnitView = (TextView) findViewById(R.id.speed_unit);
         mHeadingTextView = (TextView) findViewById(R.id.heading_text);
         mAccuracyTextView = (TextView) findViewById(R.id.accuracy_text);
-//        mMarkLatitudeTextView = (TextView) findViewById(R.id.next_mark_lat);
-//        mMarkLongitudeTextView = (TextView) findViewById(R.id.next_mark_lon);
         mDistanceTextView = (TextView) findViewById(R.id.distance_text);
         mDistanceUnitTextView = (TextView) findViewById(R.id.dist_unit);
         mBearingTextView = (TextView) findViewById(R.id.bearing_text);
         mVarianceTextView = (TextView) findViewById(R.id.variance_text);
-//        mLastUpdateTimeTextView = (TextView) findViewById(R.id.last_update_time_text);
         mTimeToMarkTextView = (TextView) findViewById(R.id.time_to_mark);
         mTimeTextView = (TextView) findViewById(R.id.time_text);
-
-        // Set labels.
-//        mNextMarkLabel = getResources().getString(R.string.next_mark);
-//        mLatitudeLabel = getResources().getString(R.string.latitude_label);
-//        mLongitudeLabel = getResources().getString(R.string.longitude_label);
-//        mSpeedLabel = getResources().getString(R.string.speed_label);
-//        mHeadingLabel = getResources().getString(R.string.heading_label);
-//        mAccuracyTextViewLabel = getResources().getString(R.string.accuracy);
-//        mDistanceTextViewLabel = getResources().getString(R.string.distance_label);
-//        mBearingTextViewLabel = getResources().getString(R.string.bearing_label);
-//        mLastUpdateTimeLabel = getResources().getString(R.string.last_update_time_label);
-//        mTimeToMarkTextViewLabel =getResources().getString(R.string.time_to_mark_label);
 
         mRequestingLocationUpdates = true;
         mLastUpdateTime = "";
 
         // Update values using data stored in the Bundle.
-//        myState = savedInstanceState;
         updateValuesFromBundle(savedInstanceState);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
 
-        // Kick off the process of building the LocationCallback, LocationRequest, and
-        // LocationSettingsRequest objects.
-//        createLocationCallback();
-//        createLocationRequest();
-//        buildLocationSettingsRequest();
-//        startLocationUpdates();
     }
 
     /**
@@ -587,26 +548,9 @@ public class MainActivity extends AppCompatActivity {
 
         mNextMarkTextView.setText(nextMarkFull);
 
-//        // Check to see if next mark is not the finish
-//        if (nextMark.equals("Finish")) {
-//
-//            // Find the the target point on the finish line (A Mark, H Mark or Line)
-//            // Pass in the currentLocation
-//            nextMark =  theLine.getFinishTarget(mCurrentLocation);
-//
-//            if (nextMark.equals("Line")) {
-//                // Insert the finish line crossing point
-//                destMark = theLine.getFinishPoint(mCurrentLocation);
-//            } else {
-//                // Set the next mark to either A or H
-//                mNextMarkTextView.setText("Fin - " + nextMark + " Mark");
-//                destMark = theMarks.getNextMark(nextMark);
-//            }
-//        } else {
          // Not the finish, set the next mark normally
         destMark = theMarks.getNextMark(nextMark);
         updateUI();
-//        }
 
     }
 
@@ -725,13 +669,6 @@ public class MainActivity extends AppCompatActivity {
 //            currentTimeDisplay = java.text.DateFormat.getTimeInstance().format(new Date());
             currentTimeDisplay = time.format(currentTime);
 
-//                    String.format("%02d:%02d:%02d",
-//                    TimeUnit.SECONDS.toHours(currentTime),
-//                    TimeUnit.SECONDS.toMinutes(currentTime) -
-//                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(currentTime)),
-//                    TimeUnit.SECONDS.toSeconds(currentTime) -
-//                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(currentTime)));
-
             // Calculate time to the mark
             mSpeed = (float) mCurrentLocation.getSpeed();
 
@@ -752,14 +689,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
         // Send info to UI
-//            mLatitudeTextView.setText(mLatitudeLabel + ": " + mCurrentLocation.getLatitude());
-//            mLongitudeTextView.setText(mLongitudeLabel + ": " + mCurrentLocation.getLongitude());
             mSpeedTextView.setText(speedDisplay);
-//            mSpeedUnitView.setText("kts");
             mHeadingTextView.setText(displayHeading);
             mAccuracyTextView.setText(String.valueOf((int) mCurrentLocation.getAccuracy()) + " m");
-//            mMarkLatitudeTextView.setText("Mark " + mLatitudeLabel + ": " + String.format("%.4f", destMark.getLatitude()));
-//            mMarkLongitudeTextView.setText("Mark " + mLongitudeLabel + ": " + String.format("%.4f", destMark.getLongitude()));
             mDistanceTextView.setText(displayDistToMark);
             mDistanceUnitTextView.setText(distUnits);
             mBearingTextView.setText(String.format("%03d", displayBearingToMark));
@@ -770,7 +702,6 @@ public class MainActivity extends AppCompatActivity {
             if ( bearingVariance > 2) {
                 mVarianceTextView.setTextColor(Color.GREEN);
             }
-//            mLastUpdateTimeTextView.setText(mLastUpdateTimeLabel + ": " + timeSinceLastUpdate);updateValuesFromBundle
             mTimeToMarkTextView.setText(ttmDisplay);
             mTimeTextView.setText(currentTimeDisplay);
         }
