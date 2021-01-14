@@ -1,4 +1,4 @@
-package com.sail.sailright2;
+package com.sail.sailstart;
 
 import android.location.Location;
 import android.os.Environment;

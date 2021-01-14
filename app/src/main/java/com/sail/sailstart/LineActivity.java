@@ -1,10 +1,8 @@
-package com.sail.sailright2;
+package com.sail.sailstart;
 
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
-
-import androidx.core.location.LocationManagerCompat;
 
 public class LineActivity {
 
