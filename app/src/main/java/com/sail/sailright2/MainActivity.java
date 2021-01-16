@@ -152,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mDistanceTextView;
     private TextView mDistanceUnitTextView;
     private TextView mBearingTextView;
-    private TextView mTimeToMarkTextView;
-    private TextView mTimeTextView;
+    private TextView mClockTextView;
+
 
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
@@ -683,8 +683,62 @@ public class MainActivity extends AppCompatActivity {
             mBearingTextView.setText(String.format("%03d", displayBearingToMark));
 //            mTimeToMarkTextView.setText(ttmDisplay);
 //            mTimeTextView.setText(currentTimeDisplay);
+
         }
     }
+
+    public void countdown() {
+            if(resetClock) {
+                startClock.cancel();
+            }
+            timerStarted = true;
+            startClock = new CountDownTimer(timeToStart * 1000 + 1020, 1000) {
+                public void onTick(long millisUntilStart) {
+                    clock = (millisUntilStart)/ 1000 - 1;
+                    Log.e("millis", String.valueOf(millisUntilStart) + "  " + (millisUntilStart)/1000 + " " + clock);
+//                clockDisplay = String.format("%02d' %02d\"",
+//                    TimeUnit.SECONDS.toMinutes(clock) -
+//                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(clock)),
+//                    TimeUnit.SECONDS.toSeconds(clock) -
+//                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(clock)));
+//
+//                    mClockTextView.setText(clockDisplay);
+                    showClock(clock);
+                    secsLeft = (double) clock;
+
+
+//                        if (clock == 0) {
+//                            playSounds("shotgun");
+//                        } else {
+//                            if (Math.round((secsLeft) / 60) * 60 == secsLeft) {
+//                                playSounds("air_horn");
+//                            }
+//                        }
+                    }
+
+                    public void onFinish () {
+//                        playSounds("shotgun");
+                        mClockTextView.setText("* GO ! *");
+
+
+                    };
+
+            }.start();
+
+    }
+
+    public void showClock(long clock) {
+            clockDisplay = String.format("%02d' %02d\"",
+            TimeUnit.SECONDS.toMinutes(clock) -
+            TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(clock)),
+            TimeUnit.SECONDS.toSeconds(clock) -
+            TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(clock)));
+
+            mClockTextView.setText(clockDisplay);
+
+    }
+
+
 
     @Override
     public void onResume() {
