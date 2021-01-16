@@ -23,8 +23,10 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -163,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mVarianceTextView;
     private TextView mTimeToMarkTextView;
     private TextView mTimeTextView;
+    private TextView mClockTextView;
 
 
     // Labels.
@@ -231,6 +234,18 @@ public class MainActivity extends AppCompatActivity {
     int listMarkSize, listCourseSize;
     String raceCourse;
 
+    long timeToStart = 70 ;//* 60;
+    public Boolean timerStarted = false;
+    Boolean resetClock =false;
+    CountDownTimer startClock;
+    private Long clock;
+    private String clockDisplay;
+    double secsLeft;
+
+    public MediaPlayer mediaPlayer;
+    String sound;
+
+
     ArrayList courseMarks;
     Bundle savedInstanceState;
     Bundle mStartData;
@@ -280,13 +295,13 @@ public class MainActivity extends AppCompatActivity {
         mCourseTextView = (TextView) findViewById(R.id.course_name);
         mSpeedTextView = (TextView) findViewById(R.id.speed_text);
         mHeadingTextView = (TextView) findViewById(R.id.heading_text);
-        mAccuracyTextView = (TextView) findViewById(R.id.accuracy_text);
+//        mAccuracyTextView = (TextView) findViewById(R.id.accuracy_text);
         mDistanceTextView = (TextView) findViewById(R.id.distance_text);
         mDistanceUnitTextView = (TextView) findViewById(R.id.dist_unit);
         mBearingTextView = (TextView) findViewById(R.id.bearing_text);
-        mVarianceTextView = (TextView) findViewById(R.id.variance_text);
-        mTimeToMarkTextView = (TextView) findViewById(R.id.time_to_mark);
-        mTimeTextView = (TextView) findViewById(R.id.time_text);
+//        mVarianceTextView = (TextView) findViewById(R.id.variance_text);
+//        mTimeToMarkTextView = (TextView) findViewById(R.id.time_to_mark);
+//        mTimeTextView = (TextView) findViewById(R.id.time_text);
 
         mRequestingLocationUpdates = true;
         mLastUpdateTime = "";
@@ -297,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
 
+        showClock(timeToStart);
     }
 
     /**
@@ -461,107 +477,107 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-    /**
-     * This method is called when the + course button is pressed
-     */
-    public void next_course(View view) {
-        {
-            // Increment to the position of the next course on the list
-            if (posCourse >= listCourseSize - 1) {
-                posCourse = 0;
-            } else
-                posCourse = posCourse + 1;
-        }
-        setCourse();
-        setNextMark();
-    }
-
-    public void previous_course(View view) {
-        {
-            // Decrement to the position of the previous course on the list
-            if (posCourse <= 0) {
-                posCourse = listCourseSize - 1;
-            } else
-                posCourse = posCourse - 1;
-        }
-        setCourse();
-        setNextMark();
-    }
-
-    /**
-     *  Set race course
-     */
-    public void setCourse() {
-        listCourseSize = theCourses.courses.size();
-        raceCourse = theCourses.courses.get(posCourse).getCourseName();
-        courseMarks = theCourses.getCourse(raceCourse);
-
-        mCourseTextView.setText(raceCourse);
-    }
-
-
-
-    /**
-     * This method is called when the + button is pressed
-     */
-    public void next_mark(View view) {
-
-            // Increment to the position of the nMath.abs(ext mark on the list
-            if (posMark >= listMarkSize - 1) {
-                posMark = 0;
-            } else
-                posMark = posMark + 1;
-
-        setNextMark();
-    }
-
-    public void previous_mark(View view) {
-        {
-            // Decrement to the position of the previous mark on the list
-            if (posMark <= 0) {
-                posMark = listMarkSize - 1;
-            } else
-                posMark = posMark - 1;
-        }
-
-        setNextMark();
-    }
-
-    /**
-     *  Set next destination mark
-     */
-    private void setNextMark() {
-        if (raceCourse.equals("None")) {
-            listMarkSize = theMarks.marks.size();
-            nextMark = theMarks.marks.get(posMark).getmarkName();
-
-        } else {
-            listMarkSize = courseMarks.size();
-            nextMark = (String) courseMarks.get(posMark);
-        }
-
-        if (nextMark.length() == 1){
-            nextMarkFull = nextMark + " Mark";
-        } else {
-            nextMarkFull = nextMark;
-        }
-
-        mNextMarkTextView.setText(nextMarkFull);
-
-         // Not the finish, set the next mark normally
-        destMark = theMarks.getNextMark(nextMark);
-        updateUI();
-
-    }
+//    /**
+//     * This method is called when the + course button is pressed
+//     */
+//    public void next_course(View view) {
+//        {
+//            // Increment to the position of the next course on the list
+//            if (posCourse >= listCourseSize - 1) {
+//                posCourse = 0;
+//            } else
+//                posCourse = posCourse + 1;
+//        }
+//        setCourse();
+//        setNextMark();
+//    }
+//
+//    public void previous_course(View view) {
+//        {
+//            // Decrement to the position of the previous course on the list
+//            if (posCourse <= 0) {
+//                posCourse = listCourseSize - 1;
+//            } else
+//                posCourse = posCourse - 1;
+//        }
+//        setCourse();
+//        setNextMark();
+//    }
+//
+//    /**
+//     *  Set race course
+//     */
+//    public void setCourse() {
+//        listCourseSize = theCourses.courses.size();
+//        raceCourse = theCourses.courses.get(posCourse).getCourseName();
+//        courseMarks = theCourses.getCourse(raceCourse);
+//
+//        mCourseTextView.setText(raceCourse);
+//    }
+//
+//
+//
+//    /**
+//     * This method is called when the + button is pressed
+//     */
+//    public void next_mark(View view) {
+//
+//            // Increment to the position of the nMath.abs(ext mark on the list
+//            if (posMark >= listMarkSize - 1) {
+//                posMark = 0;
+//            } else
+//                posMark = posMark + 1;
+//
+//        setNextMark();
+//    }
+//
+//    public void previous_mark(View view) {
+//        {
+//            // Decrement to the position of the previous mark on the list
+//            if (posMark <= 0) {
+//                posMark = listMarkSize - 1;
+//            } else
+//                posMark = posMark - 1;
+//        }
+//
+//        setNextMark();
+//    }
+//
+//    /**
+//     *  Set next destination mark
+//     */
+//    private void setNextMark() {
+//        if (raceCourse.equals("None")) {
+//            listMarkSize = theMarks.marks.size();
+//            nextMark = theMarks.marks.get(posMark).getmarkName();
+//
+//        } else {
+//            listMarkSize = courseMarks.size();
+//            nextMark = (String) courseMarks.get(posMark);
+//        }
+//
+//        if (nextMark.length() == 1){
+//            nextMarkFull = nextMark + " Mark";
+//        } else {
+//            nextMarkFull = nextMark;
+//        }
+//
+//        mNextMarkTextView.setText(nextMarkFull);
+//
+//         // Not the finish, set the next mark normally
+//        destMark = theMarks.getNextMark(nextMark);
+//        updateUI();
+//
+//    }
 
     /**
      * Updates all UI fields.
      *///
     private void updateUI() {
 
-        if (nextMark.equals("Start")) {
-            openRaceStartActivity();
-        }
+//        if (nextMark.equals("Start")) {
+//            openRaceStartActivity();
+//        }
 
         // Check to see if next mark is not the finish
         if (nextMark.equals("Finish")) {
@@ -585,35 +601,35 @@ public class MainActivity extends AppCompatActivity {
         updateLocationUI();
     }
 
-    private void openRaceStartActivity() {
-        Intent startRace = new Intent(MainActivity.this, RaceStartActivity.class);
-        mStartData = new Bundle();
-        mStartData.putString("course", raceCourse);
-        mStartData.putString("mark", nextMark);
-        mStartData.putString("speed", speedDisplay);
-        mStartData.putString("distance", displayDistToMark);
-        mStartData.putString("heading", displayHeading);
-        mStartData.putInt("bearing", displayBearingToMark);
-        mStartData.putStringArrayList("courseMarks", courseMarks);
-        mStartData.putInt("markPos", posMark);
-
-        startRace.putExtras(mStartData);
-
-//        startRace.putExtra("course", raceCourse);
-        startActivity(startRace);
-        Log.e("Ret from StartActivity","");
-
-    }
+//    private void openRaceStartActivity() {
+//        Intent startRace = new Intent(MainActivity.this, RaceStartActivity.class);
+//        mStartData = new Bundle();
+//        mStartData.putString("course", raceCourse);
+//        mStartData.putString("mark", nextMark);
+//        mStartData.putString("speed", speedDisplay);
+//        mStartData.putString("distance", displayDistToMark);
+//        mStartData.putString("heading", displayHeading);
+//        mStartData.putInt("bearing", displayBearingToMark);
+//        mStartData.putStringArrayList("courseMarks", courseMarks);
+//        mStartData.putInt("markPos", posMark);
+//
+//        startRace.putExtras(mStartData);
+//
+////        startRace.putExtra("course", raceCourse);
+//        startActivity(startRace);
+//        Log.e("Ret from StartActivity","");
+//
+//    }
 
     /**Math.abs(
      * Sets the value of the UI fields for the location latitude, longitude and last update time.
      */
     private void updateLocationUI() {
 
-        if (destMark == null) {
-            setCourse();
-            setNextMark();
-        }
+//        if (destMark == null) {
+//            setCourse();
+//            setNextMark();
+//        }
 
         if (mCurrentLocation != null) {
 
@@ -706,6 +722,110 @@ public class MainActivity extends AppCompatActivity {
             mTimeTextView.setText(currentTimeDisplay);
         }
     }
+
+    // Start functions
+    public void time_plus(View view) {
+            if (timerStarted) {
+                resetClock = true;
+                timeToStart = clock + 60;
+                countdown();
+            } else {
+                timeToStart = timeToStart + 60;
+                showClock(timeToStart);
+            }
+
+    }
+
+    public void time_minus(View view) {
+            if (timeToStart >0) {
+                if (timerStarted) {
+                    resetClock = true;
+                    timeToStart = clock - 60;
+                    countdown();
+                } else {
+                    timeToStart = timeToStart - 60;
+                    showClock(timeToStart);
+                }
+            }
+    }
+
+    public void start_clock(View view) {
+        if (!timerStarted) {
+            Toast.makeText(this, "Clock started", Toast.LENGTH_SHORT).show();
+            countdown();
+        }
+    }
+
+    public void countdown() {
+            if(resetClock) {
+                startClock.cancel();
+            }
+            timerStarted = true;
+            startClock = new CountDownTimer(timeToStart * 1000 + 1020, 1000) {
+                public void onTick(long millisUntilStart) {
+                    clock = (millisUntilStart)/ 1000 - 1;
+                    Log.e("millis", String.valueOf(millisUntilStart) + "  " + (millisUntilStart)/1000 + " " + clock);
+//                clockDisplay = String.format("%02d' %02d\"",
+//                    TimeUnit.SECONDS.toMinutes(clock) -
+//                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(clock)),
+//                    TimeUnit.SECONDS.toSeconds(clock) -
+//                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(clock)));
+//
+//                    mClockTextView.setText(clockDisplay);
+                    showClock(clock);
+                    secsLeft = (double) clock;
+
+
+                        if (clock == 0) {
+                            playSounds("shotgun");
+                        } else {
+                            if (Math.round((secsLeft) / 60) * 60 == secsLeft) {
+                                playSounds("air_horn");
+                            }
+                        }
+                    }
+
+                    public void onFinish () {
+//                        playSounds("shotgun");
+                        mClockTextView.setText("* GO ! *");
+
+
+                    };
+
+            }.start();
+
+    }
+
+    public void sync_clock(View view) {
+           timeToStart = (long) Math.round((secsLeft)/60)*60;
+           resetClock=true;
+           countdown();
+
+
+
+    }
+
+    public void showClock(long clock) {
+            clockDisplay = String.format("%02d' %02d\"",
+            TimeUnit.SECONDS.toMinutes(clock) -
+            TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(clock)),
+            TimeUnit.SECONDS.toSeconds(clock) -
+            TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(clock)));
+
+            mClockTextView.setText(clockDisplay);
+    }
+
+    public void playSounds(String sound) {
+            if (sound == "air_horn") {
+                final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.air_horn);
+                mediaPlayer.start();
+            }
+            if (sound == "shotgun"){
+                final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.shotgun);
+                mediaPlayer.start();
+            }
+    }
+
 
     @Override
     public void onResume() {

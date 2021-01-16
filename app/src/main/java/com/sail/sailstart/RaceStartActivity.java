@@ -141,25 +141,25 @@ public class RaceStartActivity extends Activity {
 //
 //            setNextMarkS();
 //        }
-
-         /**
-         *  Set next destination mark
-         */
-        private void setNextMarkS() {
-
-                listMarkSize = courseMarks.size();
-                nextMark = (String) courseMarks.get(posMark);
-                Log.i("Start-next", nextMark);
-
-            if (nextMark.length() == 1){
-                nextMarkFull = nextMark + " Mark";
-            } else {
-                nextMarkFull = nextMark;
-            }
-
-            mNextMarkTextView.setText(nextMarkFull);
-//            finish();
-        }
+//
+//         /**
+//         *  Set next destination mark
+//         */
+//        private void setNextMarkS() {
+//
+//                listMarkSize = courseMarks.size();
+//                nextMark = (String) courseMarks.get(posMark);
+//                Log.i("Start-next", nextMark);
+//
+//            if (nextMark.length() == 1){
+//                nextMarkFull = nextMark + " Mark";
+//            } else {
+//                nextMarkFull = nextMark;
+//            }
+//
+//            mNextMarkTextView.setText(nextMarkFull);
+////            finish();
+//        }
 
     public void time_plus(View view) {
             if (timerStarted) {
@@ -186,7 +186,7 @@ public class RaceStartActivity extends Activity {
             }
     }
 
-    public void start_clock(View view) {
+    public void start_clock1(View view) {
         if (!timerStarted) {
             Toast.makeText(this, "Clock started", Toast.LENGTH_SHORT).show();
             countdown();
