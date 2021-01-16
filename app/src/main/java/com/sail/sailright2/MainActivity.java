@@ -277,34 +277,15 @@ public class MainActivity extends AppCompatActivity {
         // Locate the UI widgets.
         mNextMarkTextView = (TextView) findViewById(R.id.next_mark_name);
         mCourseTextView = (TextView) findViewById(R.id.course_name);
-//        mLatitudeTextView = (TextView) findViewById(R.id.latitude);
-//        mLongitudeTextView = (TextView) findViewById(R.id.longitude);
         mSpeedTextView = (TextView) findViewById(R.id.speed_text);
-//        mSpeedUnitView = (TextView) findViewById(R.id.speed_unit);
         mHeadingTextView = (TextView) findViewById(R.id.heading_text);
         mAccuracyTextView = (TextView) findViewById(R.id.accuracy_text);
-//        mMarkLatitudeTextView = (TextView) findViewById(R.id.next_mark_lat);
-//        mMarkLongitudeTextView = (TextView) findViewById(R.id.next_mark_lon);
         mDistanceTextView = (TextView) findViewById(R.id.distance_text);
         mDistanceUnitTextView = (TextView) findViewById(R.id.dist_unit);
         mBearingTextView = (TextView) findViewById(R.id.bearing_text);
         mDiscrepTextView = (TextView) findViewById(R.id.discrepancy_text);
-//        mLastUpdateTimeTextView = (TextView) findViewById(R.id.last_update_time_text);
         mTimeToMarkTextView = (TextView) findViewById(R.id.time_to_mark);
         mTimeTextView = (TextView) findViewById(R.id.time_text);
-
-        // Set labels.
-//        mNextMarkLabel = getResources().getString(R.string.next_mark);
-//        mLatitudeLabel = getResources().getString(R.string.latitude_label);
-//        mLongitudeLabel = getResources().getString(R.string.longitude_label);
-//        mSpeedLabel = getResources().getString(R.string.speed_label);
-//        mHeadingLabel = getResources().getString(R.string.heading_label);
-//        mAccuracyTextViewLabel = getResources().getString(R.string.accuracy);
-//        mDistanceTextViewLabel = getResources().getString(R.string.distance_label);
-//        mBearingTextViewLabel = getResources().getString(R.string.bearing_label);
-//        mLastUpdateTimeLabel = getResources().getString(R.string.last_update_time_label);
-//        mTimeToMarkTextViewLabel =getResources().getString(R.string.time_to_mark_label);
-
         mRequestingLocationUpdates = true;
         mLastUpdateTime = "";
 
@@ -485,92 +466,92 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-    /**
-     * This method is called when the + course button is pressed
-     */
-    public void next_course(View view) {
-        {
-            // Increment to the position of the next course on the list
-            if (posCourse >= listCourseSize - 1) {
-                posCourse = 0;
-            } else
-                posCourse = posCourse + 1;
-        }
-        setCourse();
-        setNextMark();
-    }
-
-    public void previous_course(View view) {
-        {
-            // Decrement to the position of the previous course on the list
-            if (posCourse <= 0) {
-                posCourse = listCourseSize - 1;
-            } else
-                posCourse = posCourse - 1;
-        }
-        setCourse();
-        setNextMark();
-    }
-
-    /**
-     *  Set race course
-     */
-    public void setCourse() {
-        listCourseSize = theCourses.courses.size();
-        raceCourse = theCourses.courses.get(posCourse).getCourseName();
-        courseMarks = theCourses.getCourse(raceCourse);
-
-        mCourseTextView.setText(raceCourse);
-    }
-
-
-
-    /**
-     * This method is called when the + button is pressed
-     */
-    public void next_mark(View view) {
-        {
-            // Increment to the position of the nMath.abs(ext mark on the list
-            if (posMark >= listMarkSize - 1) {
-                posMark = 0;
-            } else
-                posMark = posMark + 1;
-        }
-        setNextMark();
-    }
-
-    public void previous_mark(View view) {
-        {
-            // Decrement to the position of the previous mark on the list
-            if (posMark <= 0) {
-                posMark = listMarkSize - 1;
-            } else
-                posMark = posMark - 1;
-        }
-        setNextMark();
-    }
-
-    /**
-     *  Set next destination mark
-     */
-    public void setNextMark() {
-        if (raceCourse.equals("None")) {
-            listMarkSize = theMarks.marks.size();
-            nextMark = theMarks.marks.get(posMark).getmarkName();
-
-        } else {
-            listMarkSize = courseMarks.size();
-            nextMark = (String) courseMarks.get(posMark);
-        }
-
-        if (nextMark.length() == 1){
-            nextMarkFull = nextMark + " Mark";
-        } else {
-            nextMarkFull = nextMark;
-        }
-
-        mNextMarkTextView.setText(nextMarkFull);
-
+//    /**
+//     * This method is called when the + course button is pressed
+//     */
+//    public void next_course(View view) {
+//        {
+//            // Increment to the position of the next course on the list
+//            if (posCourse >= listCourseSize - 1) {
+//                posCourse = 0;
+//            } else
+//                posCourse = posCourse + 1;
+//        }
+//        setCourse();
+//        setNextMark();
+//    }
+//
+//    public void previous_course(View view) {
+//        {
+//            // Decrement to the position of the previous course on the list
+//            if (posCourse <= 0) {
+//                posCourse = listCourseSize - 1;
+//            } else
+//                posCourse = posCourse - 1;
+//        }
+//        setCourse();
+//        setNextMark();
+//    }
+//
+//    /**
+//     *  Set race course
+//     */
+//    public void setCourse() {
+//        listCourseSize = theCourses.courses.size();
+//        raceCourse = theCourses.courses.get(posCourse).getCourseName();
+//        courseMarks = theCourses.getCourse(raceCourse);
+//
+//        mCourseTextView.setText(raceCourse);
+//    }
+//
+//
+//
+//    /**
+//     * This method is called when the + button is pressed
+//     */
+//    public void next_mark(View view) {
+//        {
+//            // Increment to the position of the nMath.abs(ext mark on the list
+//            if (posMark >= listMarkSize - 1) {
+//                posMark = 0;
+//            } else
+//                posMark = posMark + 1;
+//        }
+//        setNextMark();
+//    }
+//
+//    public void previous_mark(View view) {
+//        {
+//            // Decrement to the position of the previous mark on the list
+//            if (posMark <= 0) {
+//                posMark = listMarkSize - 1;
+//            } else
+//                posMark = posMark - 1;
+//        }
+//        setNextMark();
+//    }
+//
+//    /**
+//     *  Set next destination mark
+//     */
+//    public void setNextMark() {
+//        if (raceCourse.equals("None")) {
+//            listMarkSize = theMarks.marks.size();
+//            nextMark = theMarks.marks.get(posMark).getmarkName();
+//
+//        } else {
+//            listMarkSize = courseMarks.size();
+//            nextMark = (String) courseMarks.get(posMark);
+//        }
+//
+//        if (nextMark.length() == 1){
+//            nextMarkFull = nextMark + " Mark";
+//        } else {
+//            nextMarkFull = nextMark;
+//        }
+//
+//        mNextMarkTextView.setText(nextMarkFull);
+//
 //        // Check to see if next mark is not the finish
 //        if (nextMark.equals("Finish")) {
 //
@@ -587,57 +568,57 @@ public class MainActivity extends AppCompatActivity {
 //                destMark = theMarks.getNextMark(nextMark);
 //            }
 //        } else {
-         // Not the finish, set the next mark normally
-        destMark = theMarks.getNextMark(nextMark);
-        updateUI();
+//         // Not the finish, set the next mark normally
+//        destMark = theMarks.getNextMark(nextMark);
+//        updateUI();
 //        }
-
-    }
+//
+//    }
 
     /**
      * Updates all UI fields.
      *///
     private void updateUI() {
 
-        if (nextMark.equals("Start")) {
-            openStartActivity();
-        }
+//        if (nextMark.equals("Start")) {
+//            openStartActivity();
+//        }
 
-        // Check to see if next mark is not the finish
-        if (nextMark.equals("Finish")) {
-
-            // Find the the target point on the finish line (A Mark, H Mark or Line)
-            // Pass in the currentLocation
-            String nextMarkFin =  theFinish.getFinishTarget(mCurrentLocation);
-            Log.e("NextMark ", nextMarkFin);
-
-            if (nextMarkFin.equals("Line")) {
-                // Insert the finish line crossing point
-                destMark = theFinish.getFinishPoint(mCurrentLocation);
-            } else {
-                // Set the next mark to either A or H
-                mNextMarkTextView.setText("Fin - " + nextMarkFin + " Mark");
-                destMark = theMarks.getNextMark(nextMarkFin);
-            }
-        }
+//        // Check to see if next mark is not the finish
+//        if (nextMark.equals("Finish")) {
+//
+//            // Find the the target point on the finish line (A Mark, H Mark or Line)
+//            // Pass in the currentLocation
+//            String nextMarkFin =  theFinish.getFinishTarget(mCurrentLocation);
+//            Log.e("NextMark ", nextMarkFin);
+//
+//            if (nextMarkFin.equals("Line")) {
+//                // Insert the finish line crossing point
+//                destMark = theFinish.getFinishPoint(mCurrentLocation);
+//            } else {
+//                // Set the next mark to either A or H
+//                mNextMarkTextView.setText("Fin - " + nextMarkFin + " Mark");
+//                destMark = theMarks.getNextMark(nextMarkFin);
+//            }
+//        }
 
         updateLocationUI();
     }
 
-    private void openStartActivity() {
-        Intent start = new Intent(this, StartActivity.class);
-        startActivity(start);
-
-    }
+//    private void openStartActivity() {
+//        Intent start = new Intent(this, StartActivity.class);
+//        startActivity(start);
+//
+//    }
 
     /**Math.abs(
      * Sets the value of the UI fields for the location latitude, longitude and last update time.
      */
     private void updateLocationUI() {
-        if (destMark == null) {
-            setCourse();
-            setNextMark();
-        }
+//        if (destMark == null) {
+//            setCourse();
+//            setNextMark();
+//        }
 
         if (mCurrentLocation != null) {
 
