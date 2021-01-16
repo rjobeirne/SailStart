@@ -23,8 +23,10 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -143,41 +145,15 @@ public class MainActivity extends AppCompatActivity {
 //    private Bundle myState;
 
     // UI Widgets.
-    private Button mStartUpdatesButton;
-    private Button mStopUpdatesButton;
     private TextView mNextMarkTextView;
     private TextView mCourseTextView;
-    private TextView mLastUpdateTimeTextView;
-    private TextView mLatitudeTextView;
-    private TextView mLongitudeTextView;
     private TextView mSpeedTextView;
-    private TextView mSpeedUnitView;
     private TextView mHeadingTextView;
-    private TextView mAccuracyTextView;
-    private TextView mMarkLatitudeTextView;
-    private TextView mMarkLongitudeTextView;
     private TextView mDistanceTextView;
     private TextView mDistanceUnitTextView;
     private TextView mBearingTextView;
-    private TextView mDiscrepTextView;
     private TextView mTimeToMarkTextView;
     private TextView mTimeTextView;
-
-
-    // Labels.
-    private String mNextMarkLabel;
-    private String mCourseLabel;
-    private String mLatitudeLabel;
-    private String mLongitudeLabel; //           return distToMark
-    private String mSpeedLabel;
-    private String mSpeedUnits;
-    private String mHeadingLabel;
-    private String mDiscrepTextViewLabel;
-    private String mAccuracyTextViewLabel;
-    private String mDistanceTextViewLabel;
-    private String mBearingTextViewLabel;
-    private String mLastUpdateTimeLabel;
-    private String mTimeToMarkTextViewLabel;
 
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
@@ -210,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
     int bearingToMark;
     int displayBearingToMark;
     String distUnits;
-    int bearingDiscrepancy;
 
     float distDisplay;
     String displayDistToMark;
@@ -228,6 +203,17 @@ public class MainActivity extends AppCompatActivity {
     String raceCourse;
     ArrayList courseMarks;
     Bundle savedInstanceState;
+
+    long timeToStart = 70 ;//* 60;
+    public Boolean timerStarted = false;
+    Boolean resetClock =false;
+    CountDownTimer startClock;
+    private Long clock;
+    private String clockDisplay;
+    double secsLeft;
+    public MediaPlayer mediaPlayer;
+    String sound;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -279,13 +265,9 @@ public class MainActivity extends AppCompatActivity {
         mCourseTextView = (TextView) findViewById(R.id.course_name);
         mSpeedTextView = (TextView) findViewById(R.id.speed_text);
         mHeadingTextView = (TextView) findViewById(R.id.heading_text);
-        mAccuracyTextView = (TextView) findViewById(R.id.accuracy_text);
         mDistanceTextView = (TextView) findViewById(R.id.distance_text);
         mDistanceUnitTextView = (TextView) findViewById(R.id.dist_unit);
         mBearingTextView = (TextView) findViewById(R.id.bearing_text);
-        mDiscrepTextView = (TextView) findViewById(R.id.discrepancy_text);
-        mTimeToMarkTextView = (TextView) findViewById(R.id.time_to_mark);
-        mTimeTextView = (TextView) findViewById(R.id.time_text);
         mRequestingLocationUpdates = true;
         mLastUpdateTime = "";
 
@@ -619,6 +601,7 @@ public class MainActivity extends AppCompatActivity {
 //            setCourse();
 //            setNextMark();
 //        }
+        destMark = theMarks.getNextMark("A");
 
         if (mCurrentLocation != null) {
 
@@ -659,9 +642,6 @@ public class MainActivity extends AppCompatActivity {
                     displayBearingToMark = bearingToMark;
                 }
 
-            // Calculate discrepancy between heading and bearing to mark
-            bearingDiscrepancy = negHeading - bearingToMark;
-
             // Get time since last update
             lastUpdateTime = mCurrentLocation.getTime();
             currentTime = Calendar.getInstance().getTimeInMillis();
@@ -696,27 +676,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
         // Send info to UI
-//            mLatitudeTextView.setText(mLatitudeLabel + ": " + mCurrentLocation.getLatitude());
-//            mLongitudeTextView.setText(mLongitudeLabel + ": " + mCurrentLocation.getLongitude());
             mSpeedTextView.setText(speedDisplay);
-//            mSpeedUnitView.setText("kts");
             mHeadingTextView.setText(displayHeading);
-            mAccuracyTextView.setText(String.valueOf((int) mCurrentLocation.getAccuracy()) + " m");
-//            mMarkLatitudeTextView.setText("Mark " + mLatitudeLabel + ": " + String.format("%.4f", destMark.getLatitude()));
-//            mMarkLongitudeTextView.setText("Mark " + mLongitudeLabel + ": " + String.format("%.4f", destMark.getLongitude()));
             mDistanceTextView.setText(displayDistToMark);
             mDistanceUnitTextView.setText(distUnits);
             mBearingTextView.setText(String.format("%03d", displayBearingToMark));
-            mDiscrepTextView.setText(String.format("%03d", bearingDiscrepancy));
-            if ( bearingDiscrepancy < -2) {
-                mDiscrepTextView.setTextColor(Color.RED);
-            }
-            if ( bearingDiscrepancy > 2) {
-                mDiscrepTextView.setTextColor(Color.GREEN);
-            }
-//            mLastUpdateTimeTextView.setText(mLastUpdateTimeLabel + ": " + timeSinceLastUpdate);updateValuesFromBundle
-            mTimeToMarkTextView.setText(ttmDisplay);
-            mTimeTextView.setText(currentTimeDisplay);
+//            mTimeToMarkTextView.setText(ttmDisplay);
+//            mTimeTextView.setText(currentTimeDisplay);
         }
     }
 
