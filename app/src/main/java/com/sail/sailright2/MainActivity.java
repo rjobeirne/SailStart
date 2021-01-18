@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
     public Boolean timerStarted = false;
     Boolean resetClock =false;
     CountDownTimer startClock;
-    private Long clock;
+    long clock = 75;
     private String clockDisplay;
     double secsLeft;
     public MediaPlayer mediaPlayer;
@@ -268,6 +268,9 @@ public class MainActivity extends AppCompatActivity {
         mDistanceTextView = (TextView) findViewById(R.id.distance_text);
         mDistanceUnitTextView = (TextView) findViewById(R.id.dist_unit);
         mBearingTextView = (TextView) findViewById(R.id.bearing_text);
+        mClockTextView = (TextView) findViewById(R.id.time_to_start);
+
+
         mRequestingLocationUpdates = true;
         mLastUpdateTime = "";
 
@@ -681,9 +684,43 @@ public class MainActivity extends AppCompatActivity {
             mDistanceTextView.setText(displayDistToMark);
             mDistanceUnitTextView.setText(distUnits);
             mBearingTextView.setText(String.format("%03d", displayBearingToMark));
-//            mTimeToMarkTextView.setText(ttmDisplay);
-//            mTimeTextView.setText(currentTimeDisplay);
 
+            showClock(timeToStart);
+
+
+        }
+    }
+
+    public void time_plus(View view) {
+            if (timerStarted) {
+                resetClock = true;
+                timeToStart = clock + 60;
+                countdown();
+            } else {
+                timeToStart = timeToStart + 60;
+                showClock(timeToStart);
+            }
+
+    }
+
+    public void time_minus(View view) {
+            if (timeToStart >0) {
+                if (timerStarted) {
+                    resetClock = true;
+                    timeToStart = clock - 60;
+                    countdown();
+                } else {
+                    timeToStart = timeToStart - 60;
+                    showClock(timeToStart);
+                }
+            }
+    }
+
+
+    public void start_clock(View view) {
+        if (!timerStarted) {
+            Toast.makeText(this, "Clock started", Toast.LENGTH_SHORT).show();
+            countdown();
         }
     }
 
