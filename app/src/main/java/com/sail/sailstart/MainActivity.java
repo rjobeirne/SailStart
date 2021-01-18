@@ -681,7 +681,7 @@ public class MainActivity extends AppCompatActivity {
             mDistanceUnitTextView.setText(distUnits);
             mBearingTextView.setText(String.format("%03d", displayBearingToMark));
 
-            showClock(timeToStart);
+//            showClock(timeToStart);
 
 
         }
@@ -740,17 +740,17 @@ public class MainActivity extends AppCompatActivity {
                     secsLeft = (double) clock;
 
 
-//                        if (clock == 0) {
-//                            playSounds("shotgun");
-//                        } else {
-//                            if (Math.round((secsLeft) / 60) * 60 == secsLeft) {
-//                                playSounds("air_horn");
-//                            }
-//                        }
+                        if (clock == 0) {
+                            playSounds("shotgun");
+                        } else {
+                            if (Math.round((secsLeft) / 60) * 60 == secsLeft) {
+                                playSounds("air_horn");
+                            }
+                        }
                     }
 
                     public void onFinish () {
-//                        playSounds("shotgun");
+                        playSounds("shotgun");
                         mClockTextView.setText("* GO ! *");
 
 
@@ -758,6 +758,12 @@ public class MainActivity extends AppCompatActivity {
 
             }.start();
 
+    }
+
+    public void sync_clock(View view) {
+           timeToStart = (long) Math.round((secsLeft)/60)*60;
+           resetClock=true;
+           countdown();
     }
 
     public void showClock(long clock) {
@@ -768,9 +774,18 @@ public class MainActivity extends AppCompatActivity {
             TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(clock)));
 
             mClockTextView.setText(clockDisplay);
-
     }
 
+    public void playSounds(String sound) {
+            if (sound == "air_horn") {
+                final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.air_horn);
+                mediaPlayer.start();
+            }
+            if (sound == "shotgun"){
+                final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.shotgun);
+                mediaPlayer.start();
+            }
+    }
 
 
     @Override
