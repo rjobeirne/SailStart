@@ -1,4 +1,4 @@
-package com.sail.sailright2;
+package com.sail.sailstart;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.sail.sailright2", appContext.getPackageName());
+        assertEquals("com.sail.sailstart", appContext.getPackageName());
     }
 }

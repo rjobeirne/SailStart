@@ -1,4 +1,4 @@
-package com.sail.sailright2;
+package com.sail.sailstart;
 
 import android.os.Environment;
 import android.util.Log;
@@ -52,7 +52,7 @@ public class Courses {
                 model.setCourseRoute(element.getAttribute("route"));
                 courses.add(model);
             }
-            Log.e("course array", String.valueOf(courses));
+//            Log.e("course array", String.valueOf(courses));
 
         } catch (SAXException | ParserConfigurationException | IOException e1) {
             e1.printStackTrace();
