@@ -283,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
         createLocationRequest();
         buildLocationSettingsRequest();
         startLocationUpdates();
+        showClock(timeToStart);
     }
 
     /**
@@ -725,9 +726,9 @@ public class MainActivity extends AppCompatActivity {
                 startClock.cancel();
             }
             timerStarted = true;
-            startClock = new CountDownTimer(timeToStart * 1000 + 1020, 1000) {
+            startClock = new CountDownTimer(timeToStart * 1000 + 1000, 1000) {
                 public void onTick(long millisUntilStart) {
-                    clock = (millisUntilStart)/ 1000 - 1;
+                    clock = (millisUntilStart)/ 1000;
                     Log.e("millis", String.valueOf(millisUntilStart) + "  " + (millisUntilStart)/1000 + " " + clock);
 //                clockDisplay = String.format("%02d' %02d\"",
 //                    TimeUnit.SECONDS.toMinutes(clock) -
@@ -750,7 +751,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     public void onFinish () {
-                        playSounds("shotgun");
+//                        playSounds("shotgun");
                         mClockTextView.setText("* GO ! *");
 
 
