@@ -168,7 +168,7 @@
         android:layout_height="88dp"
         android:background="#CDDC39"
         android:onClick="sync_clock"
-        android:src="@drawable/sync_clock"
+        android:src="@drawable/sync_clock_foreground"
         android:textColor="@color/black"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
