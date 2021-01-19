@@ -729,7 +729,7 @@ public class MainActivity extends AppCompatActivity {
                 startClock.cancel();
             }
             timerStarted = true;
-            startClock = new CountDownTimer(timeToStart * 1000 + 1000, 1000) {
+            startClock = new CountDownTimer(timeToStart * 1000, 1000) {
                 public void onTick(long millisUntilStart) {
                     clock = (millisUntilStart)/ 1000;
                     Log.e("millis", String.valueOf(millisUntilStart) + "  " + (millisUntilStart)/1000 + " " + clock);
