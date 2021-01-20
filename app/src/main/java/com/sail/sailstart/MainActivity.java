@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -153,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mClockTextView;
     private TextView mTimeToLineView;
     private TextView mTimeVarianceView;
+    private TextView mEarlyLateView;
 
 
     /**
@@ -195,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
     long timeToMark;
     String ttmDisplay;
     String timeVarDisplay;
+    String titleEarlyLate;
     long currentTime;
     String currentTimeDisplay;
 
@@ -273,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
         mBearingTextView = (TextView) findViewById(R.id.bearing_text);
         mClockTextView = (TextView) findViewById(R.id.time_to_start);
         mTimeVarianceView = (TextView) findViewById(R.id.start_time_early_late);
+        mEarlyLateView = (TextView) findViewById(R.id.start_time_early_late_title);
         mTimeToLineView = (TextView) findViewById(R.id.time_to_line);
 
 
@@ -290,6 +294,7 @@ public class MainActivity extends AppCompatActivity {
         // Kick off the process of building the LocationCallback, LocationRequest, and
         // LocationSettingsRequest objects.
         createLocationCallback();
+
         createLocationRequest();
         buildLocationSettingsRequest();
         startLocationUpdates();
@@ -698,8 +703,19 @@ public class MainActivity extends AppCompatActivity {
             mDistanceTextView.setText(displayDistToMark);
             mDistanceUnitTextView.setText(distUnits);
             mBearingTextView.setText(String.format("%03d", displayBearingToMark));
-            mTimeVarianceView.setText(timeVarDisplay);
             mTimeToLineView.setText(ttmDisplay);
+            mTimeVarianceView.setText(timeVarDisplay);
+            if ( timeVariance < 0) {
+                mTimeVarianceView.setTextColor(Color.RED);
+                mEarlyLateView.setText("Late");
+                mEarlyLateView.setTextColor(Color.RED);
+            }
+            if ( timeVariance >  0) {
+                mTimeVarianceView.setTextColor(Color.GREEN);
+                mEarlyLateView.setText("Early");
+                mEarlyLateView.setTextColor(Color.GREEN);
+            }
+
         }
     }
 
