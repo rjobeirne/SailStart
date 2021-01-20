@@ -685,7 +685,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Calc early/late to line
         timeVariance = clock - timeToMark;
-            if (timeVariance < 360000 && timeToMark > 0) {
+            if (timeVariance < 360000 && timeVariance > -360000) {
                 timeVarDisplay = String.format("%02dh %02d' %02d\"",
                         TimeUnit.SECONDS.toHours(timeVariance),
                         TimeUnit.SECONDS.toMinutes(timeVariance) -
