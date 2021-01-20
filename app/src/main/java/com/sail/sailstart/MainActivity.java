@@ -151,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mDistanceUnitTextView;
     private TextView mBearingTextView;
     private TextView mClockTextView;
+    private TextView mTimeToLineView;
+    private TextView mTimeVarianceView;
 
 
     /**
@@ -192,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
     long timeSinceLastUpdate;
     long timeToMark;
     String ttmDisplay;
+    String timeVarDisplay;
     long currentTime;
     String currentTimeDisplay;
 
@@ -207,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
     Boolean resetClock =false;
     CountDownTimer startClock;
     long clock = 75;
+    long timeVariance;
     private String clockDisplay;
     double secsLeft;
     public MediaPlayer mediaPlayer;
@@ -268,6 +272,9 @@ public class MainActivity extends AppCompatActivity {
         mDistanceUnitTextView = (TextView) findViewById(R.id.dist_unit);
         mBearingTextView = (TextView) findViewById(R.id.bearing_text);
         mClockTextView = (TextView) findViewById(R.id.time_to_start);
+        mTimeVarianceView = (TextView) findViewById(R.id.start_time_early_late);
+        mTimeToLineView = (TextView) findViewById(R.id.time_to_line);
+
 
 
         mRequestingLocationUpdates = true;
@@ -652,13 +659,6 @@ public class MainActivity extends AppCompatActivity {
 
             currentTimeDisplay = java.text.DateFormat.getTimeInstance().format(new Date());
 
-//                    String.format("%02d:%02d:%02d",
-//                    TimeUnit.SECONDS.toHours(currentTime),
-//                    TimeUnit.SECONDS.toMinutes(currentTime) -
-//                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(currentTime)),
-//                    TimeUnit.SECONDS.toSeconds(currentTime) -
-//                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(currentTime)));
-
             // Calculate time to the mark
             mSpeed = (float) mCurrentLocation.getSpeed();
 
@@ -678,16 +678,28 @@ public class MainActivity extends AppCompatActivity {
                 ttmDisplay = "--h --' --\"";
             }
 
+            // Calc early/late to line
+        timeVariance = clock - timeToMark;
+            if (timeVariance < 360000 && timeToMark > 0) {
+                timeVarDisplay = String.format("%02dh %02d' %02d\"",
+                        TimeUnit.SECONDS.toHours(timeVariance),
+                        TimeUnit.SECONDS.toMinutes(timeVariance) -
+                                TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeVariance)),
+                        TimeUnit.SECONDS.toSeconds(timeVariance) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeVariance)));
+            } else {
+                timeVarDisplay = "--h --' --\"";
+            }
+            Log.e("variance, ttl", timeVarDisplay +  " , " + ttmDisplay);
+
         // Send info to UI
             mSpeedTextView.setText(speedDisplay);
             mHeadingTextView.setText(displayHeading);
             mDistanceTextView.setText(displayDistToMark);
             mDistanceUnitTextView.setText(distUnits);
             mBearingTextView.setText(String.format("%03d", displayBearingToMark));
-
-//            showClock(timeToStart);
-
-
+            mTimeVarianceView.setText(timeVarDisplay);
+            mTimeToLineView.setText(ttmDisplay);
         }
     }
 

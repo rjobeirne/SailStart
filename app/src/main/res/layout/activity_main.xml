@@ -162,6 +162,56 @@
         app:layout_constraintBottom_toTopOf="@+id/sync"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/start_time_early_late_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/early_late"
+        android:textColor="@color/titles"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/start_time_early_late"
+        app:layout_constraintEnd_toStartOf="@id/time_to_line_title"
+        app:layout_constraintStart_toEndOf="@+id/start_clock" />
+
+    <TextView
+        android:id="@+id/start_time_early_late"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/countdown"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@id/time_to_start"
+        app:layout_constraintEnd_toStartOf="@id/time_to_line"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/start_clock" />
+
+
+    <TextView
+        android:id="@+id/time_to_line_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/time_to_line"
+        android:textColor="@color/titles"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/time_to_line"
+        app:layout_constraintEnd_toStartOf="@+id/time_plus"
+        app:layout_constraintStart_toEndOf="@+id/start_time_early_late_title" />
+
+    <TextView
+        android:id="@+id/time_to_line"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/countdown"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@id/time_to_start"
+        app:layout_constraintEnd_toStartOf="@+id/time_plus"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/start_time_early_late" />
+
+
     <ImageButton
         android:id="@+id/sync"
         android:layout_width="64dp"
