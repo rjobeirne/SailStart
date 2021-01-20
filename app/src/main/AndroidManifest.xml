@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sail.sailstart">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -21,7 +22,8 @@
         <activity
             android:name="com.sail.sailstart.MainActivity"
             android:configChanges="orientation"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

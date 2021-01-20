@@ -695,7 +695,6 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 timeVarDisplay = "--h --' --\"";
             }
-            Log.e("variance, ttl", timeVarDisplay +  " , " + ttmDisplay);
 
         // Send info to UI
             mSpeedTextView.setText(speedDisplay);
