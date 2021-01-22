@@ -174,10 +174,10 @@ public class MainActivity extends AppCompatActivity {
     FinishLine theFinish = null;
 
     // Define parameters of next mark
-    double mSpeed;
+    double mSpeed, mSmoothSpeed;
     double vmgToMark;
     String speedDisplay;
-    int mHeading;
+    int mHeading, mSmoothHeading;
     int negHeading;
     String displayHeading;
     String nextMark = "A Mark";
@@ -229,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Mark> marks = new ArrayList<>();
         ArrayList<Course> courses = new ArrayList<>();
         ArrayList courseMarks = new ArrayList();
+
+        Smooth smooth = new Smooth(4);
 
         // first check for runtime permission
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -616,6 +618,7 @@ public class MainActivity extends AppCompatActivity {
 //            setCourse();
 //            setNextMark();
 //        }
+        Smooth smooth = new Smooth(4);
         destMark = theMarks.getNextMark("A");
 
         if (mCurrentLocation != null) {
@@ -623,10 +626,14 @@ public class MainActivity extends AppCompatActivity {
         // Process gps data for display on UI
             // Convert speed to knots and format1000
             mSpeed = mCurrentLocation.getSpeed() * 1.943844;
-            speedDisplay = new DecimalFormat( "##0.0").format( mSpeed);
+            smooth.newSpeed(mSpeed);
+            mSmoothSpeed = smooth.getAvgSpeed();
+            speedDisplay = new DecimalFormat( "##0.0").format( mSmoothSpeed);
 
             // Change heading to correct format
             mHeading = (int) mCurrentLocation.getBearing();
+            smooth.newHeading(mHeading);
+            mSmoothHeading = smooth.getAvgHeading();
             if(mHeading > 180) {
                 negHeading = mHeading - 360;
             } else {
@@ -657,6 +664,19 @@ public class MainActivity extends AppCompatActivity {
                     displayBearingToMark = bearingToMark;
                 }
 
+            // Calculate discrepancy between heading and bearing to mark
+            int rawVariance = mSmoothHeading - displayBearingToMark;
+            int bearingVariance;
+            if (rawVariance < -180) {
+                bearingVariance = rawVariance + 360;
+            } else {
+                if (rawVariance > 180) {
+                    bearingVariance = rawVariance - 360;
+                } else {
+                    bearingVariance = rawVariance;
+                }
+            }
+
             // Get time since last update
             lastUpdateTime = mCurrentLocation.getTime();
             currentTime = Calendar.getInstance().getTimeInMillis();
@@ -665,11 +685,15 @@ public class MainActivity extends AppCompatActivity {
             currentTimeDisplay = java.text.DateFormat.getTimeInstance().format(new Date());
 
             // Calculate time to the mark
-            mSpeed = (float) mCurrentLocation.getSpeed();
+//            mSpeed = (float) mCurrentLocation.getSpeed();
 
             // Calc time to mark
-            vmgToMark = Math.cos(mHeading - bearingToMark) * mSpeed;
-            timeToMark = (long) (distToMark / vmgToMark);
+            vmgToMark = Math.cos(Math.toRadians(bearingVariance)) * mSmoothSpeed;
+            if (vmgToMark > 0){
+                timeToMark = (long) (distToMark / vmgToMark);
+            } else {
+                timeToMark = 370000;
+            }
 
             // Keep displayed figure below 100 hours 360000 secs.
             if (timeToMark < 360000 && timeToMark > 0) {
