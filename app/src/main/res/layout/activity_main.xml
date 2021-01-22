@@ -266,5 +266,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <TextView
+        android:id="@+id/accuracy_text"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/_105"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toStartOf="@+id/bearing_text"
+        app:layout_constraintStart_toEndOf="@+id/heading_text"
+        app:layout_constraintTop_toBottomOf="@+id/speed_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

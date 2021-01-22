@@ -64,6 +64,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Math.abs;
+
 
 /**
  * Using location settings.
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 500;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 50;
 
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
@@ -155,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTimeToLineView;
     private TextView mTimeVarianceView;
     private TextView mEarlyLateView;
+    private TextView mAccuracyTextView;
 
 
     /**
@@ -175,9 +178,15 @@ public class MainActivity extends AppCompatActivity {
 
     // Define parameters of next mark
     double mSpeed, mSmoothSpeed;
+    double mSpeed1;
+    double mSpeed2;
+    double mSpeed3;
     double vmgToMark;
     String speedDisplay;
     int mHeading, mSmoothHeading;
+    int mHeading1;
+    int mHeading2;
+    int mHeading3;
     int negHeading;
     String displayHeading;
     String nextMark = "A Mark";
@@ -204,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
     int posMark = 0;
     int posCourse = 0;
     int listMarkSize, listCourseSize;
+    int rawVariance, bearingVariance;
     String raceCourse;
     ArrayList courseMarks;
     Bundle savedInstanceState;
@@ -280,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
         mTimeVarianceView = (TextView) findViewById(R.id.start_time_early_late);
         mEarlyLateView = (TextView) findViewById(R.id.start_time_early_late_title);
         mTimeToLineView = (TextView) findViewById(R.id.time_to_line);
+        mAccuracyTextView = (TextView) findViewById(R.id.accuracy_text);
 
 
 
@@ -321,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
             // correct latitude and longitude.
             if (savedInstanceState.keySet().contains(KEY_LOCATION)) {
                 // Since KEY_LOCATION was found in the Bundle, we can be sure that mCurrentLocation
-                // is not null.
+                // is not null.Discrep
                 mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             }
 
@@ -618,29 +629,37 @@ public class MainActivity extends AppCompatActivity {
 //            setCourse();
 //            setNextMark();
 //        }
-        Smooth smooth = new Smooth(4);
+//        Smooth smooth = new Smooth(4);
         destMark = theMarks.getNextMark("A");
 
         if (mCurrentLocation != null) {
 
         // Process gps data for display on UI
-            // Convert speed to knots and format1000
+            // Convert speed to knots and format and smooth
+            mSpeed3 = mSpeed2;
+            mSpeed2 = mSpeed1;
+            mSpeed1 = mSpeed;
             mSpeed = mCurrentLocation.getSpeed() * 1.943844;
-            smooth.newSpeed(mSpeed);
-            mSmoothSpeed = smooth.getAvgSpeed();
+            mSmoothSpeed = (mSpeed + mSpeed1 + mSpeed2 + mSpeed3)/4;
+//            smooth.newSpeed(mSpeed);
+//            mSmoothSpeed = smooth.getAvgSpeed();
             speedDisplay = new DecimalFormat( "##0.0").format( mSmoothSpeed);
 
-            // Change heading to correct format
+            // Change heading to correct format and smooth
+            mHeading3 = mHeading2;
+            mHeading2 = mHeading1;
+            mHeading1 = mHeading;
             mHeading = (int) mCurrentLocation.getBearing();
-            smooth.newHeading(mHeading);
-            mSmoothHeading = smooth.getAvgHeading();
-            if(mHeading > 180) {
-                negHeading = mHeading - 360;
+            mSmoothHeading = (mHeading + mHeading1 + mHeading2 + mHeading3)/4;
+//            smooth.newHeading(mHeading);
+//            mSmoothHeading = smooth.getAvgHeading();
+            if(mSmoothSpeed > 180) {
+                negHeading = mSmoothHeading - 360;
             } else {
-                negHeading = mHeading;
+                negHeading = mSmoothHeading;
             }
 
-            displayHeading = String.format("%03d", mHeading);
+            displayHeading = String.format("%03d", mSmoothHeading);
 
             // Change distance to mark to nautical miles if > 500m and correct formattring.format decimal places
             distToMark = mCurrentLocation.distanceTo(destMark);
@@ -665,8 +684,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             // Calculate discrepancy between heading and bearing to mark
-            int rawVariance = mSmoothHeading - displayBearingToMark;
-            int bearingVariance;
+            rawVariance = mSmoothHeading - displayBearingToMark;
             if (rawVariance < -180) {
                 bearingVariance = rawVariance + 360;
             } else {
@@ -676,6 +694,7 @@ public class MainActivity extends AppCompatActivity {
                     bearingVariance = rawVariance;
                 }
             }
+            Log.e("head, smth, raw, adj", mHeading + ", " + mSmoothHeading + ", " + rawVariance + ", " + bearingVariance);
 
             // Get time since last update
             lastUpdateTime = mCurrentLocation.getTime();
@@ -699,8 +718,8 @@ public class MainActivity extends AppCompatActivity {
             if (timeToMark < 360000 && timeToMark > 0) {
                 ttmDisplay = String.format("%02dh %02d' %02d\"",
                     TimeUnit.SECONDS.toHours(timeToMark),
-                    TimeUnit.SECONDS.toMinutes(timeToMark) -
-                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeToMark)),
+                    TimeUnit.SECONDS.toMinutes(timeToMark -
+                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeToMark))),
                     TimeUnit.SECONDS.toSeconds(timeToMark) -
                     TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeToMark)));
             } else {
@@ -712,10 +731,10 @@ public class MainActivity extends AppCompatActivity {
             if (timeVariance < 360000 && timeVariance > -360000) {
                 timeVarDisplay = String.format("%02dh %02d' %02d\"",
                         TimeUnit.SECONDS.toHours(timeVariance),
-                        TimeUnit.SECONDS.toMinutes(timeVariance) -
-                                TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeVariance)),
-                        TimeUnit.SECONDS.toSeconds(timeVariance) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeVariance)));
+                        abs(TimeUnit.SECONDS.toMinutes(timeVariance) -
+                                TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeVariance))),
+                        abs(TimeUnit.SECONDS.toSeconds(timeVariance) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeVariance))));
             } else {
                 timeVarDisplay = "--h --' --\"";
             }
@@ -726,6 +745,7 @@ public class MainActivity extends AppCompatActivity {
             mDistanceTextView.setText(displayDistToMark);
             mDistanceUnitTextView.setText(distUnits);
             mBearingTextView.setText(String.format("%03d", displayBearingToMark));
+            mAccuracyTextView.setText(String.valueOf((int) mCurrentLocation.getAccuracy()) + " m");
             mTimeToLineView.setText(ttmDisplay);
             mTimeVarianceView.setText(timeVarDisplay);
             if ( timeVariance < 0) {
