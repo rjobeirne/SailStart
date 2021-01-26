@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     int mHeading3;
     int negHeading;
     String displayHeading;
-    String nextMark = "A Mark";
+    String nextMark = "A";
     String nextMarkFull;
     Location destMark;
     Double destMarkLat, destMarkLon;
@@ -312,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
         buildLocationSettingsRequest();
         startLocationUpdates();
         showClock(timeToStart);
+        destMark = theMarks.getNextMark("A");
     }
 
     /**
@@ -621,7 +622,19 @@ public class MainActivity extends AppCompatActivity {
 //
 //    }
 
-    /**Math.abs(
+    /**
+     *  Set next destination mark
+     */
+    public void switchStartMark(View view) {
+        if (nextMark.equals("A")) {
+            nextMark =  "H";
+        } else {
+            nextMark = "A";
+        }
+        destMark = theMarks.getNextMark(nextMark);
+    }
+
+    /**
      * Sets the value of the UI fields for the location latitude, longitude and last update time.
      */
     private void updateLocationUI() {
@@ -630,7 +643,9 @@ public class MainActivity extends AppCompatActivity {
 //            setNextMark();
 //        }
 //        Smooth smooth = new Smooth(4);
-        destMark = theMarks.getNextMark("A");
+//        destMark = theMarks.getNextMark("A");
+
+
 
         if (mCurrentLocation != null) {
 
@@ -741,6 +756,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         // Send info to UI
+            mNextMarkTextView.setText(nextMark + " Mark");
             mSpeedTextView.setText(speedDisplay);
             mHeadingTextView.setText(displayHeading);
             mDistanceTextView.setText(displayDistToMark);
