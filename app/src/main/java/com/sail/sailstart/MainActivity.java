@@ -673,17 +673,8 @@ public class MainActivity extends AppCompatActivity {
             startClock = new CountDownTimer(timeToStart * 1000, 1000) {
                 public void onTick(long millisUntilStart) {
                     clock = (millisUntilStart)/ 1000;
-                    Log.e("millis", String.valueOf(millisUntilStart) + "  " + (millisUntilStart)/1000 + " " + clock);
-//                clockDisplay = String.format("%02d' %02d\"",
-//                    TimeUnit.SECONDS.toMinutes(clock) -
-//                    TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(clock)),
-//                    TimeUnit.SECONDS.toSeconds(clock) -
-//                    TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(clock)));
-//
-//                    mClockTextView.setText(clockDisplay);
                     showClock(clock);
                     secsLeft = (double) clock;
-
 
                         if (clock == 0) {
                             playSounds("shotgun");
@@ -698,11 +689,8 @@ public class MainActivity extends AppCompatActivity {
 //                        playSounds("shotgun");
                         mClockTextView.setText("* GO ! *");
 
-
                     };
-
             }.start();
-
     }
 
     public void sync_clock(View view) {
