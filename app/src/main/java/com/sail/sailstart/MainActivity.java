@@ -477,150 +477,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-//    /**
-//     * This method is called when the + course button is pressed
-//     */
-//    public void next_course(View view) {
-//        {
-//            // Increment to the position of the next course on the list
-//            if (posCourse >= listCourseSize - 1) {
-//                posCourse = 0;
-//            } else
-//                posCourse = posCourse + 1;
-//        }
-//        setCourse();
-//        setNextMark();
-//    }
-//
-//    public void previous_course(View view) {
-//        {
-//            // Decrement to the position of the previous course on the list
-//            if (posCourse <= 0) {
-//                posCourse = listCourseSize - 1;
-//            } else
-//                posCourse = posCourse - 1;
-//        }
-//        setCourse();
-//        setNextMark();
-//    }
-//
-//    /**
-//     *  Set race course
-//     */
-//    public void setCourse() {
-//        listCourseSize = theCourses.courses.size();
-//        raceCourse = theCourses.courses.get(posCourse).getCourseName();
-//        courseMarks = theCourses.getCourse(raceCourse);
-//
-//        mCourseTextView.setText(raceCourse);
-//    }
-//
-//
-//
-//    /**
-//     * This method is called when the + button is pressed
-//     */
-//    public void next_mark(View view) {
-//        {
-//            // Increment to the position of the nMath.abs(ext mark on the list
-//            if (posMark >= listMarkSize - 1) {
-//                posMark = 0;
-//            } else
-//                posMark = posMark + 1;
-//        }
-//        setNextMark();
-//    }
-//
-//    public void previous_mark(View view) {
-//        {
-//            // Decrement to the position of the previous mark on the list
-//            if (posMark <= 0) {
-//                posMark = listMarkSize - 1;
-//            } else
-//                posMark = posMark - 1;
-//        }
-//        setNextMark();
-//    }
-//
-//    /**
-//     *  Set next destination mark
-//     */
-//    public void setNextMark() {
-//        if (raceCourse.equals("None")) {
-//            listMarkSize = theMarks.marks.size();
-//            nextMark = theMarks.marks.get(posMark).getmarkName();
-//
-//        } else {
-//            listMarkSize = courseMarks.size();
-//            nextMark = (String) courseMarks.get(posMark);
-//        }
-//
-//        if (nextMark.length() == 1){
-//            nextMarkFull = nextMark + " Mark";
-//        } else {
-//            nextMarkFull = nextMark;
-//        }
-//
-//        mNextMarkTextView.setText(nextMarkFull);
-//
-//        // Check to see if next mark is not the finish
-//        if (nextMark.equals("Finish")) {
-//
-//            // Find the the target point on the finish line (A Mark, H Mark or Line)
-//            // Pass in the currentLocation
-//            nextMark =  theFinish.getFinishTarget(mCurrentLocation);
-//
-//            if (nextMark.equals("Line")) {
-//                // Insert the finish line crossing point
-//                destMark = theFinish.getFinishPoint(mCurrentLocation);
-//            } else {
-//                // Set the next mark to either A or H
-//                mNextMarkTextView.setText("Fin - " + nextMark + " Mark");
-//                destMark = theMarks.getNextMark(nextMark);
-//            }
-//        } else {
-//         // Not the finish, set the next mark normally
-//        destMark = theMarks.getNextMark(nextMark);
-//        updateUI();
-//        }
-//
-//    }
 
     /**
      * Updates all UI fields.
      *///
     private void updateUI() {
-
-//        if (nextMark.equals("Start")) {
-//            openStartActivity();
-//        }
-
-//        // Check to see if next mark is not the finish
-//        if (nextMark.equals("Finish")) {
-//
-//            // Find the the target point on the finish line (A Mark, H Mark or Line)
-//            // Pass in the currentLocation
-//            String nextMarkFin =  theFinish.getFinishTarget(mCurrentLocation);
-//            Log.e("NextMark ", nextMarkFin);
-//
-//            if (nextMarkFin.equals("Line")) {
-//                // Insert the finish line crossing point
-//                destMark = theFinish.getFinishPoint(mCurrentLocation);
-//            } else {
-//                // Set the next mark to either A or H
-//                mNextMarkTextView.setText("Fin - " + nextMarkFin + " Mark");
-//                destMark = theMarks.getNextMark(nextMarkFin);
-//            }
-//        }
-
         updateLocationUI();
     }
-
-//    private void openStartActivity() {
-//        Intent start = new Intent(this, StartActivity.class);
-//        startActivity(start);
-//
-//    }
 
     /**
      *  Set next destination mark
@@ -638,15 +501,8 @@ public class MainActivity extends AppCompatActivity {
      * Sets the value of the UI fields for the location latitude, longitude and last update time.
      */
     private void updateLocationUI() {
-//        if (destMark == null) {
-//            setCourse();
-//            setNextMark();
-//        }
 //        Smooth smooth = new Smooth(4);
 //        destMark = theMarks.getNextMark("A");
-
-
-
         if (mCurrentLocation != null) {
 
         // Process gps data for display on UI
@@ -718,9 +574,6 @@ public class MainActivity extends AppCompatActivity {
             timeSinceLastUpdate = (currentTime - lastUpdateTime)/1000;
 
             currentTimeDisplay = java.text.DateFormat.getTimeInstance().format(new Date());
-
-            // Calculate time to the mark
-//            mSpeed = (float) mCurrentLocation.getSpeed();
 
             // Calc time to mark
             vmgToMark = Math.cos(Math.toRadians(bearingVariance)) * mSmoothSpeed;
