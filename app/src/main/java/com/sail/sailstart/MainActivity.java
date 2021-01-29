@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
     double secsLeft;
     public MediaPlayer mediaPlayer;
     String sound;
+    String clockControl = "Go";
 
 
     @Override
@@ -659,8 +660,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void start_clock(View view) {
-        if (!timerStarted) {
+        if (timerStarted) {
+            stop_clock();
+        } else {
             Toast.makeText(this, "Clock started", Toast.LENGTH_SHORT).show();
+            clockControl = "Stop";
             countdown();
         }
     }
@@ -691,6 +695,11 @@ public class MainActivity extends AppCompatActivity {
 
                     };
             }.start();
+    }
+
+    public void stop_clock() {
+        startClock.cancel();
+
     }
 
     public void sync_clock(View view) {
@@ -867,7 +876,9 @@ public class MainActivity extends AppCompatActivity {
 
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
+        if (timerStarted) {
+            stop_clock();
+        }
         new Handler().postDelayed(new Runnable() {
 
             @Override
