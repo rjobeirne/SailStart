@@ -38,6 +38,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -240,6 +241,15 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Mark> marks = new ArrayList<>();
         ArrayList<Course> courses = new ArrayList<>();
         ArrayList courseMarks = new ArrayList();
+
+        Button mButton = (Button) findViewById(R.id.start_clock);
+        mButton.setText(clockControl);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+              start_clock(v);
+            }
+        });
+
 
         Smooth smooth = new Smooth(4);
 
@@ -660,13 +670,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void start_clock(View view) {
+        Button mButton = (Button)findViewById(R.id.start_clock);
         if (timerStarted) {
+            Toast.makeText(this, "Clock stopped", Toast.LENGTH_SHORT).show();
+            clockControl = "Go";
+            mButton.setBackgroundColor(Color.GREEN);
             stop_clock();
+            showClock(timeToStart);
+            resetClock = true;
+            timerStarted = false;
         } else {
             Toast.makeText(this, "Clock started", Toast.LENGTH_SHORT).show();
+            mButton.setBackgroundColor(Color.RED);
             clockControl = "Stop";
             countdown();
         }
+        mButton.setText(clockControl);
     }
 
     public void countdown() {

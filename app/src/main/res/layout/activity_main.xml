@@ -157,14 +157,12 @@
 
     <Button
         android:id="@+id/start_clock"
-        android:layout_width="64dp"
+        android:layout_width="88dp"
         android:layout_height="88dp"
         android:layout_marginBottom="16dp"
-        android:background="#2FBF34"
+        android:background="@color/button_go"
         android:gravity="center|center_horizontal|center_vertical"
-        android:onClick="start_clock"
         android:src="@drawable/start_tick"
-        android:text="Go"
         android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/sync"

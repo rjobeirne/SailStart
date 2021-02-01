@@ -7,5 +7,6 @@
     <color name="white">#EEEEEE</color>
     <color name="titles">#8F8F8F</color>
     <color name="button_background">#939191</color>
+    <color name="button_go">#00FF00</color>
 
 </resources>
